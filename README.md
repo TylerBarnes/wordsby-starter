@@ -1,5 +1,5 @@
 # GatsbyPress Starter (Pre-Alpha)
 
-A Gatsby WordPress starter theme for GatsbyPress Admin https://github.com/TylerBarnes/GatsbyPress-Admin
+A Gatsby starter theme to be used with GatsbyPress Admin https://github.com/TylerBarnes/GatsbyPress-Admin
 
-Nothing yet...
+Nothing here yet...

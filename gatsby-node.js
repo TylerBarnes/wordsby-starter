@@ -141,68 +141,57 @@ exports.createPages = ({ actions, graphql }) => {
         // get the dynamic post types posts
         const posts = result.data[postTypeGraphqlCamel].edges;
 
-        let postsWithNoTemplate = posts.filter(post => post.template === "");
+        _.each(posts, ({ node: post }) => {
+          const useDefault = post.template === "";
+          const templateName = post.template.replace(".php", "");
 
-        console.log(postsWithNoTemplate);
+          const usedPageTemplate = useDefault
+            ? `${templatesPath}/defaults/${post.type}.js`
+            : `${templatesPath}/${templateName}.js`;
+          // const templatePath = `${templatesPath}/${templateName}.js`;
+          // const defaultTemplatePath = `${templatesPath}/defaults/${postTypeSlug}.js`;
+          // const defaultTemplateTemplate = `${templatesPath}/defaults/.default.js`;
 
-        // uniquePostsWithNoTemplate = _.uniq(postsWithNoTemplate, post => {
+          // let usedPageTemplate;
 
-        // })
+          // // let doesDefaultTemplateTemplateExist = false;
+          // let doesTemplateExist = false;
 
-        // let allTemplates = [
-        //   {
-        //     name: "default",
-        //     path: `${templatesPath}/default/.default.js`,
-        //     exists: fs.existsSync(`${templatesPath}/default/.default.js`)
-        //   }
-        // ];
+          // // check if template exists
+          // if (fs.existsSync(templatePath)) {
+          //   usedPageTemplate = templatePath;
+          //   doesTemplateExist = true;
+          // }
 
-        // _.each(postMetaData, ({ node: post }) => {
-        //   const templateName = post.template.replace(".php", "");
-        //   const templatePath = `${templatesPath}/${templateName}.js`;
-        //   const defaultTemplatePath = `${templatesPath}/defaults/${postTypeSlug}.js`;
-        //   const defaultTemplateTemplate = `${templatesPath}/defaults/.default.js`;
+          // // if no template then check if default template exists
+          // if (fs.existsSync(defaultTemplatePath)) {
+          //   usedPageTemplate = defaultTemplatePath;
+          //   doesTemplateExist = true;
+          // }
 
-        //   let usedPageTemplate;
+          // // if no other templates but the default.js then create a default template in .generated/ from the default.js template template.
+          // if (!doesTemplateExist && fs.existsSync(defaultTemplateTemplate)) {
+          //   // let doesDefaultTemplateTemplateExist = true;
+          //   // doesTemplateExist = true;
+          //   // create file from template
+          //   // then set it as the template to use
+          // }
 
-        //   // let doesDefaultTemplateTemplateExist = false;
-        //   let doesTemplateExist = false;
-
-        //   // check if template exists
-        //   if (fs.existsSync(templatePath)) {
-        //     usedPageTemplate = templatePath;
-        //     doesTemplateExist = true;
-        //   }
-
-        //   // if no template then check if default template exists
-        //   if (fs.existsSync(defaultTemplatePath)) {
-        //     usedPageTemplate = defaultTemplatePath;
-        //     doesTemplateExist = true;
-        //   }
-
-        //   // if no other templates but the default.js then create a default template in .generated/ from the default.js template template.
-        //   if (!doesTemplateExist && fs.existsSync(defaultTemplateTemplate)) {
-        //     // let doesDefaultTemplateTemplateExist = true;
-        //     // doesTemplateExist = true;
-        //     // create file from template
-        //     // then set it as the template to use
-        //   }
-
-        //   // if a template exists then create the page
-        //   if (doesTemplateExist) {
-        //     createPage({
-        //       path: post.link,
-        //       component: usedPageTemplate,
-        //       context: {
-        //         id: post.id
-        //       }
-        //     });
-        //   } else {
-        //     console.warn(
-        //       `No template found for "${post.title}" (${post.type}).`
-        //     );
-        //   }
-        // });
+          // // if a template exists then create the page
+          // if (doesTemplateExist) {
+          createPage({
+            path: post.link,
+            component: usedPageTemplate,
+            context: {
+              id: post.id
+            }
+          });
+          // } else {
+          //   console.warn(
+          //     `No template found for "${post.title}" (${post.type}).`
+          //   );
+          // }
+        });
       });
     });
   });

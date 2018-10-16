@@ -41,7 +41,7 @@ exports.createPages = ({ actions, graphql }) => {
       ({ node: { slug: postType } }) => {
         const postTypeSlug = postType;
 
-        // handle custom post types needing to be prefixed with Wp
+        // handle custom post types need to be prefixed with Wp in graphql
         if (postType !== "post" && postType !== "page") {
           postType = `wp_${postType}`;
         }

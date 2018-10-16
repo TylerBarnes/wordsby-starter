@@ -1,191 +1,89 @@
 const _ = require("lodash");
 const path = require("path");
+const fs = require("fs");
 
 exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;
 
   return graphql(`
     {
-      allWordpressPage {
+      allWordpressWpTypes(filter: { slug: { ne: "attachment" } }) {
         edges {
           node {
-            id
             slug
-            status
-            template
-            link
           }
         }
       }
     }
-  `)
-    .then(result => {
-      if (result.errors) {
-        result.errors.forEach(e => console.error(e.toString()));
-        return Promise.reject(result.errors);
-      }
+  `).then(result => {
+    if (result.errors) {
+      result.errors.forEach(e => console.error(e.toString()));
+      return Promise.reject(result.errors);
+    }
 
-      const templatePath = path.resolve(`./src/templates/pages`);
+    result.data.allWordpressWpTypes.edges.map(
+      ({ node: { slug: postType } }) => {
+        const postTypeSlug = postType;
 
-      _.each(result.data.allWordpressPage.edges, edge => {
-        const template = edge.node.template;
-
-        // Default template slug in wordpress
-        let templateSlug = "page";
-
-        // Remove file extension
-        if (template !== "") {
-          templateSlug = template.replace(".php", "");
+        // handle custom post types needing to be prefixed with Wp
+        if (postType !== "post" && postType !== "page") {
+          postType = `wp_${postType}`;
         }
 
-        const pageTemplate = `${templatePath}/${templateSlug}.js`;
+        // make the returned post types into camel case to pass to json graphql.
+        postTypeGraphqlSlug = `all_wordpress_${postType}`;
+        const postTypeGraphqlCamel = _.camelCase(postTypeGraphqlSlug);
 
-        createPage({
-          path: edge.node.link,
-          component: pageTemplate,
-          context: {
-            id: edge.node.id
-          }
-        });
-      });
-    })
-    .then(() => {
-      return graphql(`
-        {
-          allWordpressPost {
-            edges {
-              node {
-                id
-                type
-                slug
-                link
-                tags {
-                  name
-                  slug
+        return graphql(`{
+                ${postTypeGraphqlCamel} {
+                    edges {
+                        node {
+                            id
+                            slug
+                            status
+                            template
+                            link
+                        }
+                    }
                 }
-                categories {
-                  name
-                  slug
-                }
-              }
+            }`).then(result => {
+          const postMetaData = result.data[postTypeGraphqlCamel].edges;
+
+          const templatePath = path.resolve(`./src/templates`);
+
+          _.each(postMetaData, edge => {
+            const template = edge.node.template;
+
+            // Default template slug in wordpress
+            let templateSlug = `post-type-defaults/${postTypeSlug}`;
+
+            // Remove file extension
+            if (template !== "") {
+              templateSlug = template.replace(".php", "");
             }
-          }
-          # Add custom post types here
-          # allWordpressWpTeam {
-          #   edges {
-          #     node {
-          #       id
-          #       type
-          #       slug
-          #       link
-          #     }
-          #   }
-          # }
-          # allWordpressWpFeaturedProjects {
-          #   edges {
-          #     node {
-          #       id
-          #       type
-          #       slug
-          #       link
-          #     }
-          #   }
-          # }
-        }
-      `);
-    })
-    .then(result => {
-      if (result.errors) {
-        result.errors.forEach(e => console.error(e.toString()));
-        return Promise.reject(result.errors);
+
+            const pageTemplate = `${templatePath}/${templateSlug}.js`;
+
+            if (!fs.existsSync(pageTemplate)) {
+              console.warn(
+                `${pageTemplate} doesn't exist. skipping creation of page`
+              );
+
+              return;
+            }
+
+            createPage({
+              path: edge.node.link,
+              component: pageTemplate,
+              context: {
+                id: edge.node.id
+              }
+            });
+          });
+        });
       }
-
-      const templatePath = path.resolve(`./src/templates/posts`);
-
-      // Build a list of categories and tags
-      const categories = [];
-      const tags = [];
-
-      // Iterate over the array of posts
-      _.each(result.data.allWordpressPost.edges, edge => {
-        const templateSlug = edge.node.type;
-        const postTemplate = `${templatePath}/${templateSlug}.js`;
-
-        // Add this post's categories and tags to the global list
-        _.each(edge.node.tags, tag => {
-          tags.push(tag);
-        });
-        _.each(edge.node.categories, category => {
-          categories.push(category);
-        });
-        createPage({
-          path: edge.node.link,
-          component: postTemplate,
-          context: {
-            id: edge.node.id
-          }
-        });
-      });
-
-      const tagsTemplate = path.resolve(`./src/templates/taxonomies/tag.js`);
-      const categoriesTemplate = path.resolve(
-        `./src/templates/taxonomies/category.js`
-      );
-
-      // Create a unique list of categories and tags
-      const uniqueCategories = _.uniqBy(categories, "slug");
-      const uniqueTags = _.uniqBy(tags, "slug");
-
-      // For each category and tag, create a Gatsby page
-      _.each(uniqueCategories, cat => {
-        createPage({
-          path: `/categories/${cat.slug}/`,
-          component: categoriesTemplate,
-          context: {
-            name: cat.name,
-            slug: cat.slug
-          }
-        });
-      });
-      _.each(uniqueTags, tag => {
-        createPage({
-          path: `/tags/${tag.slug}/`,
-          component: tagsTemplate,
-          context: {
-            name: tag.name,
-            slug: tag.slug
-          }
-        });
-      });
-
-      // // Custom post type team
-      // _.each(result.data.allWordpressWpTeam.edges, edge => {
-      //   const templateSlug = edge.node.type;
-      //   const postTemplate = `${templatePath}/${templateSlug}.js`;
-
-      //   createPage({
-      //     path: edge.node.link,
-      //     component: postTemplate,
-      //     context: {
-      //       id: edge.node.id
-      //     }
-      //   });
-      // });
-
-      // // Custom post type projects
-      // _.each(result.data.allWordpressWpFeaturedProjects.edges, edge => {
-      //   const templateSlug = edge.node.type;
-      //   const postTemplate = `${templatePath}/${templateSlug}.js`;
-
-      //   createPage({
-      //     path: edge.node.link,
-      //     component: postTemplate,
-      //     context: {
-      //       id: edge.node.id
-      //     }
-      //   });
-      // });
-    });
+    );
+  });
 };
 
 // Use this to nullify the loader for any browser only packages

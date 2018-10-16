@@ -142,12 +142,61 @@ exports.createPages = ({ actions, graphql }) => {
         const posts = result.data[postTypeGraphqlCamel].edges;
 
         _.each(posts, ({ node: post }) => {
+          const defaultTemplatePath = `${templatesPath}/defaults/${
+            post.type
+          }.js`;
           const useDefault = post.template === "";
-          const templateName = post.template.replace(".php", "");
 
-          const usedPageTemplate = useDefault
-            ? `${templatesPath}/defaults/${post.type}.js`
-            : `${templatesPath}/${templateName}.js`;
+          const templateName = post.template.replace(".php", "");
+          const pageTemplate = `${templatesPath}/${templateName}.js`;
+          const doesTemplateExist = allTemplates.filter(
+            template => template.path === pageTemplate
+          );
+
+          // console.log(`${post.title} should use default: ${useDefault}`);
+
+          // let usedPageTemplate = false;
+          // let doesTemplateExist = false;
+          if (!useDefault && doesTemplateExist[0].path) {
+            createPage({
+              path: post.link,
+              component: pageTemplate,
+              context: {
+                id: post.id
+              }
+            });
+          } else {
+            console.warn(
+              `${post.title} has a missing page template attached. Using ${
+                doesTemplateExist[0].name
+              } instead.`
+            );
+            useDefault = true;
+          }
+
+          // // if use default, just create the page using it
+          if (useDefault) {
+            createPage({
+              path: post.link,
+              component: defaultTemplatePath,
+              context: {
+                id: post.id
+              }
+            });
+          }
+
+          // // if not use default then check if the page template exists
+          // if (!useDefault && doesTemplateExist) {
+          //   // if it does then create the page
+          //   usedPageTemplate = pageTemplate;
+          // } else if (!useDefault && !doesTemplateExist) {
+          //   // if it doesn't then use the default anyway.
+          //   usedPageTemplate = defaultTemplatePath;
+          // }
+
+          // const usedPageTemplate = useDefault
+          //   ? `${templatesPath}/defaults/${post.type}.js`
+          //   : `${templatesPath}/${templateName}.js`;
           // const templatePath = `${templatesPath}/${templateName}.js`;
           // const defaultTemplatePath = `${templatesPath}/defaults/${postTypeSlug}.js`;
           // const defaultTemplateTemplate = `${templatesPath}/defaults/.default.js`;
@@ -179,13 +228,21 @@ exports.createPages = ({ actions, graphql }) => {
 
           // // if a template exists then create the page
           // if (doesTemplateExist) {
-          createPage({
-            path: post.link,
-            component: usedPageTemplate,
-            context: {
-              id: post.id
-            }
-          });
+          // if (usedPageTemplate) {
+          //   createPage({
+          //     path: post.link,
+          //     component: usedPageTemplate,
+          //     context: {
+          //       id: post.id
+          //     }
+          //   });
+          // } else {
+          // console.error(
+          //   `${
+          //     post.title
+          //   } will not be created. No default template and no page template. Either restore .default.js or create a template for the post type`
+          // );
+          // }
           // } else {
           //   console.warn(
           //     `No template found for "${post.title}" (${post.type}).`

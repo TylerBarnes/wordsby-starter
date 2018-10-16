@@ -23,12 +23,9 @@ exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;
 
   const templatesPath = path.resolve(`./src/templates`);
-  let existingTemplateFiles = glob.sync(`${templatesPath}/**/*.js`, {});
-
-  const defaultTemplateTemplateContents = fs.readFileSync(
-    `${templatesPath}/defaults/.default.js`,
-    "utf8"
-  );
+  let existingTemplateFiles = glob.sync(`${templatesPath}/**/*.js`, {
+    dot: true
+  });
 
   let allTemplates = existingTemplateFiles.map(filePath => {
     return {
@@ -37,6 +34,14 @@ exports.createPages = ({ actions, graphql }) => {
       default: filePath.indexOf("/defaults/") > -1
     };
   });
+
+  const doesTemplateTemplateExist = allTemplates.some(
+    file => file.name === ".default.js"
+  );
+
+  const defaultTemplateTemplateContents = doesTemplateTemplateExist
+    ? fs.readFileSync(`${templatesPath}/defaults/.default.js`, "utf8")
+    : false;
 
   return graphql(`
     {
@@ -57,7 +62,7 @@ exports.createPages = ({ actions, graphql }) => {
     let postTypes = result.data.allWordpressWpTypes.edges;
 
     postTypes.map(({ node: { slug: postType } }) => {
-      const postTypeSlug = postType;
+      // const postTypeSlug = postType;
       const filename = `${postType}.js`;
 
       // handle custom post types need to be prefixed with Wp in graphql
@@ -71,8 +76,13 @@ exports.createPages = ({ actions, graphql }) => {
       const postTypeGraphqlCamel = _.camelCase(postTypeGraphqlSlug);
 
       // if the post type doesn't have a default template then create one here.
-      if (!allTemplates.some(template => template.name === filename)) {
-        // console.log(`${filename} default template not found`);
+      if (
+        !allTemplates.some(template => template.name === filename) &&
+        doesTemplateTemplateExist
+      ) {
+        console.log(
+          `${filename} default template not found, creating it now from .default.js`
+        );
         // create template from default template here
         const inFileGraphQLCamel = _.camelCase(`wordpress_${postType}`);
 
@@ -97,8 +107,22 @@ exports.createPages = ({ actions, graphql }) => {
           templateContents,
           "utf8"
         );
+
+        allTemplates.push({
+          name: filename,
+          path: `${templatesPath}/defaults/${filename}`,
+          default: true
+        });
+      } else if (
+        !allTemplates.some(template => template.name === filename) &&
+        !doesTemplateTemplateExist
+      ) {
+        console.error(
+          `.default.js does not exist. Please add it so post types can be generated.`
+        );
       }
 
+      // get the dynamic post types
       return graphql(`{
                 ${postTypeGraphqlCamel} {
                     edges {
@@ -114,9 +138,12 @@ exports.createPages = ({ actions, graphql }) => {
                     }
                 }
             }`).then(result => {
+        // get the dynamic post types posts
         const posts = result.data[postTypeGraphqlCamel].edges;
 
-        // let postsWithNoTemplate = postMetaData.map(post => post.template === '');
+        let postsWithNoTemplate = posts.filter(post => post.template === "");
+
+        console.log(postsWithNoTemplate);
 
         // uniquePostsWithNoTemplate = _.uniq(postsWithNoTemplate, post => {
 

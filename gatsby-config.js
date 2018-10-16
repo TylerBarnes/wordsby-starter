@@ -35,13 +35,6 @@ module.exports = {
     {
       resolve: "gatsby-plugin-emotion"
     },
-    {
-      resolve: "gatsby-source-filesystem",
-      options: {
-        path: `${__dirname}/static/img`,
-        name: "images"
-      }
-    },
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
     {
@@ -78,7 +71,7 @@ module.exports = {
           "/*/*/comments",
           "/yoast/**",
           "/oembed/**",
-          "**/types",
+          // "**/types",
           "**/statuses",
           "**/users/**",
           "**/users",

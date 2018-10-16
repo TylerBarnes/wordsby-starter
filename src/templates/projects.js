@@ -3,10 +3,10 @@ import { graphql } from "gatsby";
 import { css } from "emotion";
 
 // Import app components
-import PostList from "../../components/PostList";
-import TitleText from "../../components/titleText";
-import GridEdges from "../../components/gridEdges";
-import Footer from "../../components/Footer";
+// import PostList from "../../components/PostList";
+// import TitleText from "../../components/titleText";
+import GridEdges from "../components/gridEdges";
+import Footer from "../components/Footer";
 
 const styles = css`
   h1 {
@@ -14,13 +14,17 @@ const styles = css`
   }
 `;
 
-export const PageTeam = ({ data }) => {
+export const PageProjects = ({ data }) => {
   return (
     <Fragment>
       <div className={styles}>
         <GridEdges>
-          <TitleText props={data.wordpressPage} />
-          <PostList posts={data.allWordpressWpTeam.edges} type="team" />
+          {/* <TitleText props={data.wordpressPage} /> */}
+
+          {/* <PostList
+            posts={data.allWordpressWpFeaturedProjects.edges}
+            type="projects"
+          /> */}
         </GridEdges>
       </div>
 
@@ -30,7 +34,7 @@ export const PageTeam = ({ data }) => {
 };
 
 const Page = ({ data }) => {
-  return <PageTeam data={data} />;
+  return <PageProjects data={data} />;
 };
 Page.defaultProps = {
   menuLogo: true
@@ -38,25 +42,36 @@ Page.defaultProps = {
 export default Page;
 
 export const pageQuery = graphql`
-  query PageTeamById($id: String!) {
+  query PageProjectsById($id: String!) {
     wordpressPage(id: { eq: $id }) {
       title
       acf {
         text
       }
     }
-    allWordpressWpTeam(sort: { fields: [menu_order] }) {
+    allWordpressWpFeaturedProjects(sort: { fields: [menu_order] }) {
       edges {
         node {
           id
           title
           link
+          categories {
+            name
+          }
           acf {
-            jobTitle
             image {
               localFile {
                 childImageSharp {
                   fluid(maxWidth: 768) {
+                    ...GatsbyImageSharpFluid_tracedSVG
+                  }
+                }
+              }
+            }
+            logo_white {
+              localFile {
+                childImageSharp {
+                  fluid(maxWidth: 250) {
                     ...GatsbyImageSharpFluid_tracedSVG
                   }
                 }

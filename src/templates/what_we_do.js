@@ -4,9 +4,9 @@ import { css } from "emotion";
 import Img from "gatsby-image";
 
 // Import app components
-import GridEdges from "../../components/gridEdges";
-import Color from "../../components/Color";
-import Footer from "../../components/Footer";
+import GridEdges from "../components/gridEdges";
+import Color from "../components/Color";
+import Footer from "../components/Footer";
 
 const styles = css`
   h1 {

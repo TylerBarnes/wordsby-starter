@@ -6,16 +6,14 @@ import { graphql } from "gatsby";
 // Import app components
 import GridEdges from "../../components/gridEdges";
 import Breadcrumbs from "../../components/Breadcrumbs";
-import TitleText from "../../components/titleText";
-import SlidesAnimation from "../../components/SlidesAnimation";
 import Footer from "../../components/Footer";
 
 const style = css``;
 
 export const ProjectPostTemplate = ({ props }) => {
   const {
-    title,
-    acf: { slides }
+    title
+    // acf: { slides }
   } = props;
 
   return (
@@ -26,10 +24,10 @@ export const ProjectPostTemplate = ({ props }) => {
             <Link to="/featured-projects">Back to projects</Link>
           </Breadcrumbs>
 
-          <TitleText props={props} />
+          {/* <TitleText props={props} /> */}
         </GridEdges>
 
-        <SlidesAnimation slides={slides} />
+        {/* <SlidesAnimation slides={slides} /> */}
       </div>
 
       <Footer logo={true} />

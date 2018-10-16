@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { css } from "react-emotion";
 
 // import app component
-import PostTeam from "./PostTeam";
+// import PostTeam from "./PostTeam";
 import PostProject from "./PostProject";
 
 const styles = css`
@@ -58,11 +58,11 @@ class PostList extends Component {
   render() {
     let card;
     const postList = this.props.posts.map((post, index) => {
-      this.props.type === "team" &&
-        (card = <PostTeam post={post} key={index} />);
+      // this.props.type === "team" &&
+      //   (card = <PostTeam post={post} key={index} />);
 
-      this.props.type === "projects" &&
-        (card = <PostProject post={post} key={index} />);
+      // this.props.type === "projects" &&
+      //   (card = <PostProject post={post} key={index} />);
       return card;
     });
     return <div className={styles}>{postList}</div>;

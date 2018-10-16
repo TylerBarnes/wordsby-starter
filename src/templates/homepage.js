@@ -3,9 +3,9 @@ import { graphql } from "gatsby";
 import { css } from "emotion";
 
 // Import app components
-import GridEdges from "../../components/gridEdges";
-import Logo from "../../components/Logo";
-import Button from "../../components/Button";
+import GridEdges from "../components/gridEdges";
+import Logo from "../components/Logo";
+import Button from "../components/Button";
 
 const styles = css`
   min-height: 90vh;

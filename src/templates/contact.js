@@ -3,8 +3,8 @@ import { graphql } from "gatsby";
 import { css } from "emotion";
 
 // Import app components
-import Color from "../../components/Color";
-import Map from "../../components/Map";
+import Color from "../components/Color";
+// import Map from "../../components/Map";
 
 const styles = css`
   * {
@@ -104,9 +104,7 @@ export const PageContact = ({ props }) => {
     <Fragment>
       <div className={styles}>
         <div className="container">
-          <div className="googleMaps">
-            <Map />
-          </div>
+          <div className="googleMaps">{/* <Map /> */}</div>
 
           <div className="content">
             <div className="contactInfo">

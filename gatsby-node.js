@@ -2,6 +2,22 @@ const _ = require("lodash");
 const path = require("path");
 const fs = require("fs");
 
+// Use this to nullify the loader for any browser only packages
+// exports.onCreateWebpackConfig = ({ actions, stage }) => {
+//   if (stage === "build-html") {
+//     actions.setWebpackConfig({
+//       module: {
+//         rules: [
+//           {
+//             test: /react-mapbox-gl/,
+//             use: ["null-loader"]
+//           }
+//         ]
+//       }
+//     });
+//   }
+// };
+
 exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;
 
@@ -85,19 +101,3 @@ exports.createPages = ({ actions, graphql }) => {
     );
   });
 };
-
-// Use this to nullify the loader for any browser only packages
-// exports.onCreateWebpackConfig = ({ actions, stage }) => {
-//   if (stage === "build-html") {
-//     actions.setWebpackConfig({
-//       module: {
-//         rules: [
-//           {
-//             test: /react-mapbox-gl/,
-//             use: ["null-loader"]
-//           }
-//         ]
-//       }
-//     });
-//   }
-// };

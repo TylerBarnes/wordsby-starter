@@ -1,6 +1,7 @@
 const _ = require("lodash");
 const path = require("path");
 const fs = require("fs");
+const glob = require("glob");
 
 // Use this to nullify the loader for any browser only packages
 // exports.onCreateWebpackConfig = ({ actions, stage }) => {
@@ -21,6 +22,22 @@ const fs = require("fs");
 exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;
 
+  const templatesPath = path.resolve(`./src/templates`);
+  let existingTemplateFiles = glob.sync(`${templatesPath}/**/*.js`, {});
+
+  const defaultTemplateTemplateContents = fs.readFileSync(
+    `${templatesPath}/defaults/.default.js`,
+    "utf8"
+  );
+
+  let allTemplates = existingTemplateFiles.map(filePath => {
+    return {
+      name: filePath.substring(filePath.lastIndexOf("/") + 1),
+      path: filePath,
+      default: filePath.indexOf("/defaults/") > -1
+    };
+  });
+
   return graphql(`
     {
       allWordpressWpTypes(filter: { slug: { ne: "attachment" } }) {
@@ -37,67 +54,129 @@ exports.createPages = ({ actions, graphql }) => {
       return Promise.reject(result.errors);
     }
 
-    result.data.allWordpressWpTypes.edges.map(
-      ({ node: { slug: postType } }) => {
-        const postTypeSlug = postType;
+    let postTypes = result.data.allWordpressWpTypes.edges;
 
-        // handle custom post types need to be prefixed with Wp in graphql
-        if (postType !== "post" && postType !== "page") {
-          postType = `wp_${postType}`;
-        }
+    postTypes.map(({ node: { slug: postType } }) => {
+      const postTypeSlug = postType;
+      const filename = `${postType}.js`;
 
-        // make the returned post types into camel case to pass to json graphql.
-        postTypeGraphqlSlug = `all_wordpress_${postType}`;
-        const postTypeGraphqlCamel = _.camelCase(postTypeGraphqlSlug);
+      // handle custom post types need to be prefixed with Wp in graphql
+      if (postType !== "post" && postType !== "page") {
+        postType = `wp_${postType}`;
+      }
 
-        return graphql(`{
+      // make the returned post types into camel case to pass to json graphql.
+      postTypeGraphqlSlug = `all_wordpress_${postType}`;
+
+      const postTypeGraphqlCamel = _.camelCase(postTypeGraphqlSlug);
+
+      // if the post type doesn't have a default template then create one here.
+      if (!allTemplates.some(template => template.name === filename)) {
+        // console.log(`${filename} default template not found`);
+        // create template from default template here
+        const inFileGraphQLCamel = _.camelCase(`wordpress_${postType}`);
+
+        let templateContents = _.replace(
+          defaultTemplateTemplateContents,
+          /wordpressDefault/g,
+          inFileGraphQLCamel
+        );
+        templateContents = _.replace(
+          templateContents,
+          /defaultQuery/g,
+          `${inFileGraphQLCamel}Query`
+        );
+        templateContents = _.replace(
+          templateContents,
+          /DefaultById/g,
+          `${inFileGraphQLCamel}ById`
+        );
+
+        fs.writeFileSync(
+          `${templatesPath}/defaults/${filename}`,
+          templateContents,
+          "utf8"
+        );
+      }
+
+      return graphql(`{
                 ${postTypeGraphqlCamel} {
                     edges {
                         node {
                             id
                             slug
                             status
+                            type
+                            title
                             template
                             link
                         }
                     }
                 }
             }`).then(result => {
-          const postMetaData = result.data[postTypeGraphqlCamel].edges;
+        const posts = result.data[postTypeGraphqlCamel].edges;
 
-          const templatePath = path.resolve(`./src/templates`);
+        // let postsWithNoTemplate = postMetaData.map(post => post.template === '');
 
-          _.each(postMetaData, edge => {
-            const template = edge.node.template;
+        // uniquePostsWithNoTemplate = _.uniq(postsWithNoTemplate, post => {
 
-            // Default template slug in wordpress
-            let templateSlug = `post-type-defaults/${postTypeSlug}`;
+        // })
 
-            // Remove file extension
-            if (template !== "") {
-              templateSlug = template.replace(".php", "");
-            }
+        // let allTemplates = [
+        //   {
+        //     name: "default",
+        //     path: `${templatesPath}/default/.default.js`,
+        //     exists: fs.existsSync(`${templatesPath}/default/.default.js`)
+        //   }
+        // ];
 
-            const pageTemplate = `${templatePath}/${templateSlug}.js`;
+        // _.each(postMetaData, ({ node: post }) => {
+        //   const templateName = post.template.replace(".php", "");
+        //   const templatePath = `${templatesPath}/${templateName}.js`;
+        //   const defaultTemplatePath = `${templatesPath}/defaults/${postTypeSlug}.js`;
+        //   const defaultTemplateTemplate = `${templatesPath}/defaults/.default.js`;
 
-            if (!fs.existsSync(pageTemplate)) {
-              console.warn(
-                `${pageTemplate} doesn't exist. skipping creation of page`
-              );
+        //   let usedPageTemplate;
 
-              return;
-            }
+        //   // let doesDefaultTemplateTemplateExist = false;
+        //   let doesTemplateExist = false;
 
-            createPage({
-              path: edge.node.link,
-              component: pageTemplate,
-              context: {
-                id: edge.node.id
-              }
-            });
-          });
-        });
-      }
-    );
+        //   // check if template exists
+        //   if (fs.existsSync(templatePath)) {
+        //     usedPageTemplate = templatePath;
+        //     doesTemplateExist = true;
+        //   }
+
+        //   // if no template then check if default template exists
+        //   if (fs.existsSync(defaultTemplatePath)) {
+        //     usedPageTemplate = defaultTemplatePath;
+        //     doesTemplateExist = true;
+        //   }
+
+        //   // if no other templates but the default.js then create a default template in .generated/ from the default.js template template.
+        //   if (!doesTemplateExist && fs.existsSync(defaultTemplateTemplate)) {
+        //     // let doesDefaultTemplateTemplateExist = true;
+        //     // doesTemplateExist = true;
+        //     // create file from template
+        //     // then set it as the template to use
+        //   }
+
+        //   // if a template exists then create the page
+        //   if (doesTemplateExist) {
+        //     createPage({
+        //       path: post.link,
+        //       component: usedPageTemplate,
+        //       context: {
+        //         id: post.id
+        //       }
+        //     });
+        //   } else {
+        //     console.warn(
+        //       `No template found for "${post.title}" (${post.type}).`
+        //     );
+        //   }
+        // });
+      });
+    });
   });
 };

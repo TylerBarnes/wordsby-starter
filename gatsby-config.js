@@ -48,9 +48,9 @@ module.exports = {
         display: "minimal-ui",
         icon: "src/favicon.png", // This path is relative to the root of the site.
         // The base url to your WP site.
-        baseUrl: "sunshine.bare.ca",
+        baseUrl: "gatsbywp.code",
         // The protocol. This can be http or https.
-        protocol: "https",
+        protocol: "http",
         // Use 'Advanced Custom Fields' Wordpress plugin
         useACF: true,
         // Include specific ACF Option Pages that have a set post ID
@@ -71,11 +71,29 @@ module.exports = {
           "/*/*/comments",
           "/yoast/**",
           "/oembed/**",
-          // "**/types",
           "**/statuses",
           "**/users/**",
           "**/users",
-          "**/settings"
+          "**/settings",
+          "**/pages/**",
+          "**/pages",
+          "**/posts/**",
+          "**/posts",
+          "**/menu-locations/**",
+          "**/menu-locations",
+          "**/menus/**",
+          "**/wp/v1",
+          "**/wp/v2",
+          "**/acf/v3/categories",
+          "**/acf/v3/categories/**",
+          "**/acf/v3/posts/**",
+          "**/acf/v3/posts",
+          "**/acf/v3/pages/**",
+          "**/acf/v3/pages",
+          "**/acf/v3/media/**",
+          "**/acf/v3/media",
+          "**/acf/v3/users/**",
+          "**/acf/v3/users"
         ],
         // Search and Replace Urls across WordPress content.
         searchAndReplaceContentUrls: {

@@ -75,8 +75,25 @@ module.exports = {
           "**/users/**",
           "**/users",
           "**/settings",
+          "**/pages/**",
           "**/pages",
-          "**/posts"
+          "**/posts/**",
+          "**/posts",
+          "**/menu-locations/**",
+          "**/menu-locations",
+          "**/menus/**",
+          "**/wp/v1",
+          "**/wp/v2",
+          "**/acf/v3/categories",
+          "**/acf/v3/categories/**",
+          "**/acf/v3/posts/**",
+          "**/acf/v3/posts",
+          "**/acf/v3/pages/**",
+          "**/acf/v3/pages",
+          "**/acf/v3/media/**",
+          "**/acf/v3/media",
+          "**/acf/v3/users/**",
+          "**/acf/v3/users"
         ],
         // Search and Replace Urls across WordPress content.
         searchAndReplaceContentUrls: {

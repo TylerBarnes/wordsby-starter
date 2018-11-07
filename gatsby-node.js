@@ -3,8 +3,18 @@ const path = require("path");
 const fs = require("fs");
 const glob = require("glob");
 
+const componentFileType = "js";
+
 exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;
+
+  const templatesPath = path.resolve(`./src/templates/`);
+
+  let existingTemplateFiles = glob.sync(`${templatesPath}/**/*.js`, {
+    dot: true
+  });
+
+  // console.log(existingTemplateFiles);
 
   return graphql(`
     {
@@ -14,6 +24,7 @@ exports.createPages = ({ actions, graphql }) => {
             wordpress_id
             pathname
             post_type
+            template_slug
           }
         }
       }
@@ -24,10 +35,16 @@ exports.createPages = ({ actions, graphql }) => {
       return Promise.reject(result.errors);
     }
 
-    const templatesPath = path.resolve(`./src/templates/`);
-
     _.each(result.data.allWordpressWpCollections.edges, edge => {
-      const template = edge.node.template_slug;
+      const template = `${templatesPath}/${
+        edge.node.template_slug
+      }.${componentFileType}`;
+
+      let usedTemplate = `${templatesPath}/default`;
+
+      if (existingTemplateFiles.includes(template)) {
+        usedTemplate = template;
+      }
 
       // Default template slug
       let templateSlugPath = "default/index";

@@ -1,0 +1,3 @@
+☐ Setup template hierarchy routing. Should only be for single posts using "default-${post_type}".
+☐ Setup default routing for taxonomy pages. Respect wether they should have an archive or not.
+☐ Make sure the attached terms / taxonomies for a post are coming through

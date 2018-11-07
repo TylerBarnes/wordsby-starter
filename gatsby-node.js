@@ -9,12 +9,15 @@ exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;
 
   const templatesPath = path.resolve(`./src/templates/`);
+  const defaultTemplate = `${templatesPath}/default/index.js`;
 
   let existingTemplateFiles = glob.sync(`${templatesPath}/**/*.js`, {
     dot: true
   });
 
-  // console.log(existingTemplateFiles);
+  if (!fs.existsSync(defaultTemplate)) {
+    throw `default template doesn't exist at ${defaultTemplate}`;
+  }
 
   return graphql(`
     {
@@ -29,35 +32,38 @@ exports.createPages = ({ actions, graphql }) => {
         }
       }
     }
-  `).then(result => {
-    if (result.errors) {
-      result.errors.forEach(e => console.error(e.toString()));
-      return Promise.reject(result.errors);
-    }
-
-    _.each(result.data.allWordpressWpCollections.edges, edge => {
-      const template = `${templatesPath}/${
-        edge.node.template_slug
-      }.${componentFileType}`;
-
-      let usedTemplate = `${templatesPath}/default`;
-
-      if (existingTemplateFiles.includes(template)) {
-        usedTemplate = template;
+  `)
+    .then(result => {
+      if (result.errors) {
+        result.errors.forEach(e => console.error(e.toString()));
+        return Promise.reject(result.errors);
       }
 
-      // Default template slug
-      let templateSlugPath = "default/index";
+      const posts = result.data.allWordpressWpCollections.edges;
 
-      const pageTemplate = `${templatesPath}/${templateSlugPath}.js`;
+      _.each(posts, post => {
+        const template = `${templatesPath}/${
+          post.node.template_slug
+        }.${componentFileType}`;
 
-      createPage({
-        path: edge.node.pathname,
-        component: pageTemplate,
-        context: {
-          id: edge.node.wordpress_id
+        let usedTemplate;
+
+        if (existingTemplateFiles.includes(template)) {
+          usedTemplate = template;
+        } else {
+          usedTemplate = defaultTemplate;
         }
+
+        createPage({
+          path: post.node.pathname,
+          component: usedTemplate,
+          context: {
+            id: post.node.wordpress_id
+          }
+        });
       });
+    })
+    .catch(err => {
+      throw "GatsbyPress Admin may not be active on the WP install! This starter will not work properly without it.";
     });
-  });
 };

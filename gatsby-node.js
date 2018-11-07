@@ -30,9 +30,9 @@ exports.createPages = ({ actions, graphql }) => {
       const template = edge.node.template_slug;
 
       // Default template slug
-      let templateSlug = "default/index";
+      let templateSlugPath = "default/index";
 
-      const pageTemplate = `${templatesPath}/${templateSlug}.js`;
+      const pageTemplate = `${templatesPath}/${templateSlugPath}.js`;
 
       createPage({
         path: edge.node.pathname,

@@ -18,7 +18,7 @@ const Page = ({ data }) => {
 export default Page;
 
 export const CollectionQuery = graphql`
-  query DefaultById($id: Int!) {
+  query TeamById($id: Int!) {
     wordpressWpCollections(wordpress_id: { eq: $id }) {
       post_title
       post_content

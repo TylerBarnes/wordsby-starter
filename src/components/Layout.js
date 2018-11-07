@@ -48,7 +48,7 @@ const TemplateWrapper = ({
     {team ? <MetaTag title={team.title} /> : ""}
     {project ? <MetaTag title={project.title} /> : ""}
 
-    <Header logo={props.menuLogo} />
+    {/* <Header logo={props.menuLogo} /> */}
 
     <Transition location={location}>{children}</Transition>
   </div>

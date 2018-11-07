@@ -1,192 +1,7 @@
 const _ = require("lodash");
 const path = require("path");
-
-exports.createPages = ({ actions, graphql }) => {
-  const { createPage } = actions;
-
-  return graphql(`
-    {
-      allWordpressPage {
-        edges {
-          node {
-            id
-            slug
-            status
-            template
-            link
-          }
-        }
-      }
-    }
-  `)
-    .then(result => {
-      if (result.errors) {
-        result.errors.forEach(e => console.error(e.toString()));
-        return Promise.reject(result.errors);
-      }
-
-      const templatePath = path.resolve(`./src/templates/pages`);
-
-      _.each(result.data.allWordpressPage.edges, edge => {
-        const template = edge.node.template;
-
-        // Default template slug in wordpress
-        let templateSlug = "page";
-
-        // Remove file extension
-        if (template !== "") {
-          templateSlug = template.replace(".php", "");
-        }
-
-        const pageTemplate = `${templatePath}/${templateSlug}.js`;
-
-        createPage({
-          path: edge.node.link,
-          component: pageTemplate,
-          context: {
-            id: edge.node.id
-          }
-        });
-      });
-    })
-    .then(() => {
-      return graphql(`
-        {
-          allWordpressPost {
-            edges {
-              node {
-                id
-                type
-                slug
-                link
-                tags {
-                  name
-                  slug
-                }
-                categories {
-                  name
-                  slug
-                }
-              }
-            }
-          }
-          # Add custom post types here
-          # allWordpressWpTeam {
-          #   edges {
-          #     node {
-          #       id
-          #       type
-          #       slug
-          #       link
-          #     }
-          #   }
-          # }
-          # allWordpressWpFeaturedProjects {
-          #   edges {
-          #     node {
-          #       id
-          #       type
-          #       slug
-          #       link
-          #     }
-          #   }
-          # }
-        }
-      `);
-    })
-    .then(result => {
-      if (result.errors) {
-        result.errors.forEach(e => console.error(e.toString()));
-        return Promise.reject(result.errors);
-      }
-
-      const templatePath = path.resolve(`./src/templates/posts`);
-
-      // Build a list of categories and tags
-      const categories = [];
-      const tags = [];
-
-      // Iterate over the array of posts
-      _.each(result.data.allWordpressPost.edges, edge => {
-        const templateSlug = edge.node.type;
-        const postTemplate = `${templatePath}/${templateSlug}.js`;
-
-        // Add this post's categories and tags to the global list
-        _.each(edge.node.tags, tag => {
-          tags.push(tag);
-        });
-        _.each(edge.node.categories, category => {
-          categories.push(category);
-        });
-        createPage({
-          path: edge.node.link,
-          component: postTemplate,
-          context: {
-            id: edge.node.id
-          }
-        });
-      });
-
-      const tagsTemplate = path.resolve(`./src/templates/taxonomies/tag.js`);
-      const categoriesTemplate = path.resolve(
-        `./src/templates/taxonomies/category.js`
-      );
-
-      // Create a unique list of categories and tags
-      const uniqueCategories = _.uniqBy(categories, "slug");
-      const uniqueTags = _.uniqBy(tags, "slug");
-
-      // For each category and tag, create a Gatsby page
-      _.each(uniqueCategories, cat => {
-        createPage({
-          path: `/categories/${cat.slug}/`,
-          component: categoriesTemplate,
-          context: {
-            name: cat.name,
-            slug: cat.slug
-          }
-        });
-      });
-      _.each(uniqueTags, tag => {
-        createPage({
-          path: `/tags/${tag.slug}/`,
-          component: tagsTemplate,
-          context: {
-            name: tag.name,
-            slug: tag.slug
-          }
-        });
-      });
-
-      // // Custom post type team
-      // _.each(result.data.allWordpressWpTeam.edges, edge => {
-      //   const templateSlug = edge.node.type;
-      //   const postTemplate = `${templatePath}/${templateSlug}.js`;
-
-      //   createPage({
-      //     path: edge.node.link,
-      //     component: postTemplate,
-      //     context: {
-      //       id: edge.node.id
-      //     }
-      //   });
-      // });
-
-      // // Custom post type projects
-      // _.each(result.data.allWordpressWpFeaturedProjects.edges, edge => {
-      //   const templateSlug = edge.node.type;
-      //   const postTemplate = `${templatePath}/${templateSlug}.js`;
-
-      //   createPage({
-      //     path: edge.node.link,
-      //     component: postTemplate,
-      //     context: {
-      //       id: edge.node.id
-      //     }
-      //   });
-      // });
-    });
-};
+const fs = require("fs");
+const glob = require("glob");
 
 // Use this to nullify the loader for any browser only packages
 // exports.onCreateWebpackConfig = ({ actions, stage }) => {
@@ -203,3 +18,238 @@ exports.createPages = ({ actions, graphql }) => {
 //     });
 //   }
 // };
+
+exports.createPages = ({ actions, graphql }) => {
+  const { createPage } = actions;
+
+  const templatesPath = path.resolve(`./src/templates`);
+  let existingTemplateFiles = glob.sync(`${templatesPath}/**/*.js`, {
+    dot: true
+  });
+
+  let allTemplates = existingTemplateFiles.map(filePath => {
+    return {
+      name: filePath.substring(filePath.lastIndexOf("/") + 1),
+      path: filePath,
+      default: filePath.indexOf("/defaults/") > -1
+    };
+  });
+
+  const doesTemplateTemplateExist = allTemplates.some(
+    file => file.name === ".default.js"
+  );
+
+  const defaultTemplateTemplateContents = doesTemplateTemplateExist
+    ? fs.readFileSync(`${templatesPath}/defaults/.default.js`, "utf8")
+    : false;
+
+  return graphql(`
+    {
+      allWordpressWpTypes(filter: { slug: { ne: "attachment" } }) {
+        edges {
+          node {
+            slug
+          }
+        }
+      }
+    }
+  `).then(result => {
+    if (result.errors) {
+      result.errors.forEach(e => console.error(e.toString()));
+      return Promise.reject(result.errors);
+    }
+
+    let postTypes = result.data.allWordpressWpTypes.edges;
+
+    postTypes.map(({ node: { slug: postType } }) => {
+      // const postTypeSlug = postType;
+      const filename = `${postType}.js`;
+
+      // handle custom post types need to be prefixed with Wp in graphql
+      if (postType !== "post" && postType !== "page") {
+        postType = `wp_${postType}`;
+      }
+
+      // make the returned post types into camel case to pass to json graphql.
+      postTypeGraphqlSlug = `all_wordpress_${postType}`;
+
+      const postTypeGraphqlCamel = _.camelCase(postTypeGraphqlSlug);
+
+      // if the post type doesn't have a default template then create one here.
+      if (
+        !allTemplates.some(template => template.name === filename) &&
+        doesTemplateTemplateExist
+      ) {
+        console.log(
+          `${filename} default template not found, creating it now from .default.js`
+        );
+        // create template from default template here
+        const inFileGraphQLCamel = _.camelCase(`wordpress_${postType}`);
+
+        let templateContents = _.replace(
+          defaultTemplateTemplateContents,
+          /wordpressDefault/g,
+          inFileGraphQLCamel
+        );
+        templateContents = _.replace(
+          templateContents,
+          /defaultQuery/g,
+          `${inFileGraphQLCamel}Query`
+        );
+        templateContents = _.replace(
+          templateContents,
+          /DefaultById/g,
+          `${inFileGraphQLCamel}ById`
+        );
+
+        fs.writeFileSync(
+          `${templatesPath}/defaults/${filename}`,
+          templateContents,
+          "utf8"
+        );
+
+        allTemplates.push({
+          name: filename,
+          path: `${templatesPath}/defaults/${filename}`,
+          default: true
+        });
+      } else if (
+        !allTemplates.some(template => template.name === filename) &&
+        !doesTemplateTemplateExist
+      ) {
+        console.error(
+          `.default.js does not exist. Please add it so post types can be generated.`
+        );
+      }
+
+      // get the dynamic post types
+      return graphql(`{
+                ${postTypeGraphqlCamel} {
+                    edges {
+                        node {
+                            id
+                            slug
+                            status
+                            type
+                            title
+                            template
+                            link
+                        }
+                    }
+                }
+            }`).then(result => {
+        // get the dynamic post types posts
+        const posts = result.data[postTypeGraphqlCamel].edges;
+
+        _.each(posts, ({ node: post }) => {
+          const defaultTemplatePath = `${templatesPath}/defaults/${
+            post.type
+          }.js`;
+          const useDefault = post.template === "";
+
+          const templateName = post.template.replace(".php", "");
+          const pageTemplate = `${templatesPath}/${templateName}.js`;
+          const doesTemplateExist = allTemplates.filter(
+            template => template.path === pageTemplate
+          );
+
+          // console.log(`${post.title} should use default: ${useDefault}`);
+
+          // let usedPageTemplate = false;
+          // let doesTemplateExist = false;
+          if (!useDefault && doesTemplateExist[0].path) {
+            createPage({
+              path: post.link,
+              component: pageTemplate,
+              context: {
+                id: post.id
+              }
+            });
+          } else {
+            console.warn(
+              `${post.title} has a missing page template attached. Using ${
+                doesTemplateExist[0].name
+              } instead.`
+            );
+            useDefault = true;
+          }
+
+          // // if use default, just create the page using it
+          if (useDefault) {
+            createPage({
+              path: post.link,
+              component: defaultTemplatePath,
+              context: {
+                id: post.id
+              }
+            });
+          }
+
+          // // if not use default then check if the page template exists
+          // if (!useDefault && doesTemplateExist) {
+          //   // if it does then create the page
+          //   usedPageTemplate = pageTemplate;
+          // } else if (!useDefault && !doesTemplateExist) {
+          //   // if it doesn't then use the default anyway.
+          //   usedPageTemplate = defaultTemplatePath;
+          // }
+
+          // const usedPageTemplate = useDefault
+          //   ? `${templatesPath}/defaults/${post.type}.js`
+          //   : `${templatesPath}/${templateName}.js`;
+          // const templatePath = `${templatesPath}/${templateName}.js`;
+          // const defaultTemplatePath = `${templatesPath}/defaults/${postTypeSlug}.js`;
+          // const defaultTemplateTemplate = `${templatesPath}/defaults/.default.js`;
+
+          // let usedPageTemplate;
+
+          // // let doesDefaultTemplateTemplateExist = false;
+          // let doesTemplateExist = false;
+
+          // // check if template exists
+          // if (fs.existsSync(templatePath)) {
+          //   usedPageTemplate = templatePath;
+          //   doesTemplateExist = true;
+          // }
+
+          // // if no template then check if default template exists
+          // if (fs.existsSync(defaultTemplatePath)) {
+          //   usedPageTemplate = defaultTemplatePath;
+          //   doesTemplateExist = true;
+          // }
+
+          // // if no other templates but the default.js then create a default template in .generated/ from the default.js template template.
+          // if (!doesTemplateExist && fs.existsSync(defaultTemplateTemplate)) {
+          //   // let doesDefaultTemplateTemplateExist = true;
+          //   // doesTemplateExist = true;
+          //   // create file from template
+          //   // then set it as the template to use
+          // }
+
+          // // if a template exists then create the page
+          // if (doesTemplateExist) {
+          // if (usedPageTemplate) {
+          //   createPage({
+          //     path: post.link,
+          //     component: usedPageTemplate,
+          //     context: {
+          //       id: post.id
+          //     }
+          //   });
+          // } else {
+          // console.error(
+          //   `${
+          //     post.title
+          //   } will not be created. No default template and no page template. Either restore .default.js or create a template for the post type`
+          // );
+          // }
+          // } else {
+          //   console.warn(
+          //     `No template found for "${post.title}" (${post.type}).`
+          //   );
+          // }
+        });
+      });
+    });
+  });
+};

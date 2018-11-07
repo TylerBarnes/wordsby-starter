@@ -7,7 +7,7 @@ import { injectGlobal } from "emotion";
 import Color from "./Color";
 import Transition from "./Transition";
 import typographyString from "./Typography";
-import Header from "./Header";
+// import Header from "./Header";
 import MetaTag from "./MetaTag";
 
 injectGlobal`

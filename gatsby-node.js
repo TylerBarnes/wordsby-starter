@@ -28,34 +28,43 @@ exports.createPages = ({ actions, graphql }) => {
           wordpress_id
         }
       }
-    `).then(result => {
-      _.each(existingTemplateFiles, template => {
-        const indexOfFilename = template.lastIndexOf("/");
-        const indexOfExtension = template.lastIndexOf(".js");
-        const fileName = template.substring(
-          indexOfFilename + 1,
-          indexOfExtension
-        );
-        const indexOfFolderName = template.lastIndexOf(
-          "/",
-          indexOfFilename - 1
-        );
-        const folderName =
-          "/" + template.substring(indexOfFolderName + 1, indexOfFilename);
+    `)
+      .then(result => {
+        if (result.errors) {
+          result.errors.forEach(e => console.error(e.toString()));
+          return Promise.reject(result.errors);
+        }
 
-        const pathname = `/preview${folderName !== "/templates" &&
-          folderName}/${fileName}`;
+        _.each(existingTemplateFiles, template => {
+          const indexOfFilename = template.lastIndexOf("/");
+          const indexOfExtension = template.lastIndexOf(".js");
+          const fileName = template.substring(
+            indexOfFilename + 1,
+            indexOfExtension
+          );
+          const indexOfFolderName = template.lastIndexOf(
+            "/",
+            indexOfFilename - 1
+          );
+          const folderName =
+            "/" + template.substring(indexOfFolderName + 1, indexOfFilename);
 
-        createPage({
-          path: pathname,
-          component: path.resolve("./src/components/Preview.js"),
-          context: {
-            id: result.wordpress_id,
-            template: template
-          }
+          const pathname = `/preview${folderName !== "/templates" &&
+            folderName}/${fileName}`;
+
+          createPage({
+            path: pathname,
+            component: path.resolve("./src/components/Preview.js"),
+            context: {
+              id: result.wordpress_id,
+              template: template
+            }
+          });
         });
+      })
+      .catch(err => {
+        throw "There was a problem building the WP preview templates";
       });
-    });
   }
 
   return graphql(`
@@ -103,6 +112,6 @@ exports.createPages = ({ actions, graphql }) => {
       });
     })
     .catch(err => {
-      throw "GatsbyPress Admin may not be active on the WP install! This starter will not work properly without it.";
+      throw "Either your WP site is down, your WP connection details are wrong or GatsbyPress Admin isn't active on the WP install. This starter will not work properly without fixing those three things. Download the admin theme at https://github.com/TylerBarnes/GatsbyPress-Admin";
     });
 };

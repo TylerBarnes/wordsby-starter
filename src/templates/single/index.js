@@ -7,6 +7,8 @@ const Page = ({ data }) => {
     wordpressWpCollections: { post_title, post_content }
   } = data;
 
+  console.log(data);
+
   return (
     <>
       <h1>{post_title}</h1>

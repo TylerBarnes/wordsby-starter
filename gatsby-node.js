@@ -9,7 +9,7 @@ exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;
 
   const templatesPath = path.resolve(`./src/templates/`);
-  const defaultTemplate = `${templatesPath}/default/index.js`;
+  const defaultTemplate = `${templatesPath}/single/index.js`;
 
   let existingTemplateFiles = glob.sync(`${templatesPath}/**/*.js`, {
     dot: true

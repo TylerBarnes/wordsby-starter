@@ -9,6 +9,7 @@ import Transition from "./Transition";
 import typographyString from "./Typography";
 // import Header from "./Header";
 import MetaTag from "./MetaTag";
+import Preview from "./Preview";
 
 injectGlobal`
   ${typographyString}
@@ -27,30 +28,21 @@ injectGlobal`
   }
 `;
 
-const TemplateWrapper = ({
-  location,
-  children,
-  pageResources: {
-    component: { defaultProps: props }
-  },
-  data: {
-    wordpressPage: page,
-    wordpressWpTeam: team,
-    wordpressWpFeaturedProjects: project
-  }
-}) => (
+const TemplateWrapper = props => (
   <div>
     <Helmet>
       <meta charSet="utf-8" />
     </Helmet>
 
-    {page ? <MetaTag title={page.title} /> : ""}
-    {team ? <MetaTag title={team.title} /> : ""}
-    {project ? <MetaTag title={project.title} /> : ""}
+    {/* {page ? <MetaTag title={page.title} /> : ""} */}
+    {/* {team ? <MetaTag title={team.title} /> : ""} */}
+    {/* {project ? <MetaTag title={project.title} /> : ""} */}
 
     {/* <Header logo={props.menuLogo} /> */}
 
-    <Transition location={location}>{children}</Transition>
+    <Transition location={props.location}>
+      <Preview {...props}>{props.children}</Preview>
+    </Transition>
   </div>
 );
 

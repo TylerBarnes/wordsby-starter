@@ -49,14 +49,16 @@ exports.createPages = ({ actions, graphql }) => {
           const folderName =
             "/" + template.substring(indexOfFolderName + 1, indexOfFilename);
 
-          const pathname = `/preview${folderName !== "/templates" &&
+          const pathname = `${folderName !== "/templates" &&
             folderName}/${fileName}`;
 
           createPage({
             path: pathname,
-            component: path.resolve("./src/components/Preview.js"),
+            // component: path.resolve("./src/components/Preview.js"),
+            // component: defaultTemplate,
+            component: template,
             context: {
-              id: result.wordpress_id,
+              id: result.data.wordpressWpCollections.wordpress_id,
               template: template
             }
           });

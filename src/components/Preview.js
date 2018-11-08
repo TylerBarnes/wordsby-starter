@@ -1,59 +1,52 @@
 import React, { Component } from "react";
 
-export default class PreviewProvider extends Component {
-  render() {
-    let previewData = {
-      ID: 110,
-      post_author: "1",
-      post_date: "2018-11-08 05:37:34",
-      post_date_gmt: "2018-11-08 05:37:34",
-      post_content: "jfkdlajfdklsajfksd",
-      post_title: "preview",
-      post_excerpt: "",
-      post_status: "inherit",
-      comment_status: "closed",
-      ping_status: "closed",
-      post_password: "",
-      post_name: "26-autosave-v1",
-      to_ping: "",
-      pinged: "",
-      post_modified: "2018-11-08 05:37:34",
-      post_modified_gmt: "2018-11-08 05:37:34",
-      post_content_filtered: "",
-      post_parent: 26,
-      guid: "http://gatsbywp.code/2018/11/08/26-autosave-v1/",
-      menu_order: 0,
-      post_type: "page",
-      post_mime_type: "",
-      comment_count: "0",
-      filter: "raw",
-      pathname: "/2018/11/08/26-autosave-v1/",
-      permalink: "http://gatsbywp.code/2018/11/08/26-autosave-v1/",
-      featured_img: null,
-      template_slug: "default/page",
-      acf: {
-        team_title: null,
-        image_field: null,
-        repeater: null
-      },
-      acf_template: "test"
-    };
+export default class Preview extends Component {
+  constructor(props) {
+    super(props);
 
-    previewData = false;
+    this.state = {
+      previewData: false
+    };
+  }
+  componentDidMount() {
+    const urlParams =
+      typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search)
+        : false;
+
+    if (!urlParams) return;
+
+    const rest_base = urlParams.get("rest_base");
+    const post_id = urlParams.get("preview");
+    const nonce = urlParams.get("nonce");
+
+    const rest_url = `/wp-json/wp/v2/${rest_base}/${post_id}/preview/?_wpnonce=${nonce}`;
+    // const rest_url_test = `http://gatsbywp.code/wp-json/wp/v2/${rest_base}/${post_id}/preview/`;
+
+    console.log(rest_url);
+
+    fetch(rest_url)
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        this.setState({ previewData: res });
+      });
+  }
+  render() {
     const {
       props: { children }
     } = this;
 
-    if (previewData) {
-      const childWithPreview = React.Children.map(children, child => {
+    if (this.state.previewData && typeof window !== "undefined") {
+      const childrenWithPreview = React.Children.map(children, child => {
         return React.cloneElement(child, {
-          data: { wordpressWpCollections: previewData }
+          data: { wordpressWpCollections: this.state.previewData }
         });
       });
 
-      return childWithPreview;
+      return childrenWithPreview;
     } else {
-      return children;
+      return <h1>Loading</h1>;
     }
   }
 }

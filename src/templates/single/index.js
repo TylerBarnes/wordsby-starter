@@ -2,12 +2,10 @@ import React from "react";
 import { graphql } from "gatsby";
 // import GridEdges from "../../components/gridEdges";
 
-const Page = ({ data }) => {
+const Page = props => {
   const {
     wordpressWpCollections: { post_title, post_content }
-  } = data;
-
-  console.log(data);
+  } = props.data;
 
   return (
     <>

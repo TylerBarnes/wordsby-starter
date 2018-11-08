@@ -19,33 +19,43 @@ exports.createPages = ({ actions, graphql }) => {
     throw `default template doesn't exist at ${defaultTemplate}`;
   }
 
-  const previewMode = process.env.GATSBYPRESS_PREVIEW;
+  const preview = process.env.GATSBYPRESS_PREVIEW;
 
-  if (previewMode) {
-    _.each(existingTemplateFiles, template => {
-      const indexOfFilename = template.lastIndexOf("/");
-      const indexOfExtension = template.lastIndexOf(".js");
-      const filename = template.substring(
-        indexOfFilename + 1,
-        indexOfExtension
-      );
-      const indexOfFolderName = template.lastIndexOf("/", indexOfFilename - 1);
-      const folderName =
-        "/" + template.substring(indexOfFolderName + 1, indexOfFilename);
-
-      const pathname = `${folderName !== "/templates" &&
-        folderName}/${fileName}`;
-
-      createPage({
-        path: `/preview/`,
-        component: path.resolve("./src/components/Preview.js"),
-        context: {
-          id: post.node.wordpress_id
+  if (preview) {
+    return graphql(`
+      {
+        wordpressWpCollections {
+          wordpress_id
         }
+      }
+    `).then(result => {
+      _.each(existingTemplateFiles, template => {
+        const indexOfFilename = template.lastIndexOf("/");
+        const indexOfExtension = template.lastIndexOf(".js");
+        const fileName = template.substring(
+          indexOfFilename + 1,
+          indexOfExtension
+        );
+        const indexOfFolderName = template.lastIndexOf(
+          "/",
+          indexOfFilename - 1
+        );
+        const folderName =
+          "/" + template.substring(indexOfFolderName + 1, indexOfFilename);
+
+        const pathname = `/preview${folderName !== "/templates" &&
+          folderName}/${fileName}`;
+
+        createPage({
+          path: pathname,
+          component: path.resolve("./src/components/Preview.js"),
+          context: {
+            id: result.wordpress_id,
+            template: template
+          }
+        });
       });
     });
-
-    return;
   }
 
   return graphql(`

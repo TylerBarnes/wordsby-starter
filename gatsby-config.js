@@ -46,22 +46,10 @@ module.exports = {
         background_color: "#6b37bf",
         theme_color: "#6b37bf",
         display: "minimal-ui",
-        icon: "src/favicon.png", // This path is relative to the root of the site.
-        // The base url to your WP site.
+        icon: "src/favicon.png",
         baseUrl: "gatsbywp.code",
-        // The protocol. This can be http or https.
         protocol: "http",
-        // Use 'Advanced Custom Fields' Wordpress plugin
         useACF: true,
-        // Include specific ACF Option Pages that have a set post ID
-        // Regardless if an ID is set, the default options route will still be retrieved
-        // Must be using V3 of ACF to REST to include these routes
-        // Example: `["option_page_1", "option_page_2"]` will include the proper ACF option
-        // routes with the ID option_page_1 and option_page_2
-        // Dashes in IDs will be converted to underscores for use in GraphQL
-        // acfOptionPageIds: [],
-        // auth: {},
-        // Set to true to debug endpoints on 'gatsby build'
         verboseOutput: false,
         // Exclude specific routes using glob parameters
         // See: https://github.com/isaacs/minimatch
@@ -93,13 +81,15 @@ module.exports = {
           "**/acf/v3/media/**",
           "**/acf/v3/media",
           "**/acf/v3/users/**",
-          "**/acf/v3/users"
-        ],
+          "**/acf/v3/users",
+          "**/preview",
+          "**/preview/**"
+        ]
         // Search and Replace Urls across WordPress content.
-        searchAndReplaceContentUrls: {
-          sourceUrl: "https://sunshine.bare.ca(?!/wp-content/)",
-          replacementUrl: ""
-        }
+        // searchAndReplaceContentUrls: {
+        //   sourceUrl: "https://sunshine.bare.ca(?!/wp-content/)",
+        //   replacementUrl: ""
+        // }
       }
     },
     {

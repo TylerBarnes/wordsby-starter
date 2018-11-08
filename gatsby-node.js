@@ -19,6 +19,35 @@ exports.createPages = ({ actions, graphql }) => {
     throw `default template doesn't exist at ${defaultTemplate}`;
   }
 
+  const previewMode = process.env.GATSBYPRESS_PREVIEW;
+
+  if (previewMode) {
+    _.each(existingTemplateFiles, template => {
+      const indexOfFilename = template.lastIndexOf("/");
+      const indexOfExtension = template.lastIndexOf(".js");
+      const filename = template.substring(
+        indexOfFilename + 1,
+        indexOfExtension
+      );
+      const indexOfFolderName = template.lastIndexOf("/", indexOfFilename - 1);
+      const folderName =
+        "/" + template.substring(indexOfFolderName + 1, indexOfFilename);
+
+      const pathname = `${folderName !== "/templates" &&
+        folderName}/${fileName}`;
+
+      createPage({
+        path: `/preview/`,
+        component: path.resolve("./src/components/Preview.js"),
+        context: {
+          id: post.node.wordpress_id
+        }
+      });
+    });
+
+    return;
+  }
+
   return graphql(`
     {
       allWordpressWpCollections(filter: { post_status: { eq: "publish" } }) {

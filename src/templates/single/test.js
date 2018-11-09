@@ -1,6 +1,5 @@
 import React from "react";
 import { graphql } from "gatsby";
-// import GridEdges from "../../components/gridEdges";
 
 const Page = ({ data }) => {
   const {
@@ -10,6 +9,9 @@ const Page = ({ data }) => {
   return (
     <>
       <h1>{post_title}</h1>
+      <h2>
+        <strong>Template:</strong> Test Single
+      </h2>
       <p>{post_content}</p>
     </>
   );

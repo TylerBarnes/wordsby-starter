@@ -9,6 +9,9 @@ const Page = props => {
   return (
     <>
       <h1>{post_title}</h1>
+      <h2>
+        <strong>Template:</strong> Single post index.
+      </h2>
       <p>{post_content}</p>
     </>
   );

@@ -21,6 +21,8 @@ export default class Preview extends Component {
     const post_id = urlParams.get("preview");
     const nonce = urlParams.get("nonce");
 
+    if (!rest_base || !post_id || !nonce) return;
+
     const rest_url = `/wp-json/wp/v2/${rest_base}/${post_id}/preview/?_wpnonce=${nonce}`;
 
     console.log(rest_url);

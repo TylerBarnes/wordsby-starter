@@ -59,7 +59,8 @@ exports.createPages = ({ actions, graphql }) => {
             path: pathname,
             component: template,
             context: {
-              id: result.data.wordpressWpCollections.wordpress_id
+              id: result.data.wordpressWpCollections.wordpress_id,
+              preview: true
             }
           });
         });

@@ -28,8 +28,6 @@ injectGlobal`
   }
 `;
 
-const preview = process.env.GATSBYPRESS_PREVIEW;
-
 const TemplateWrapper = props => (
   <div>
     <Helmet>
@@ -37,7 +35,7 @@ const TemplateWrapper = props => (
     </Helmet>
 
     <Transition location={props.location}>
-      {preview ? (
+      {props.pageContext.preview ? (
         <Preview {...props}>{props.children}</Preview>
       ) : (
         props.children

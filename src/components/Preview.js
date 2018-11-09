@@ -34,7 +34,7 @@ export default class Preview extends Component {
       .then(res => {
         console.log(res);
 
-        if (res.post_title) {
+        if (res.ID) {
           this.setState({ previewData: res });
         } else if (res.code) {
           this.setState({ error: res });

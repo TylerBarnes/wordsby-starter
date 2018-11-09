@@ -1,6 +1,5 @@
 import React from "react";
 import { graphql } from "gatsby";
-// import GridEdges from "../../components/gridEdges";
 
 const Page = props => {
   const {

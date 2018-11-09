@@ -1,4 +1,5 @@
 module.exports = {
+  pathPrefix: "/preview",
   siteMetadata: {
     title: "GatsbyPress Starter"
   },
@@ -15,7 +16,7 @@ module.exports = {
         icon: "src/favicon.png" // This path is relative to the root of the site.
       }
     },
-    "gatsby-plugin-offline",
+    // "gatsby-plugin-offline",
     {
       resolve: "gatsby-plugin-layout",
       options: {
@@ -47,7 +48,7 @@ module.exports = {
         theme_color: "#6b37bf",
         display: "minimal-ui",
         icon: "src/favicon.png",
-        baseUrl: "gatsbywp.code",
+        baseUrl: "gatsbywpmamp.test",
         protocol: "http",
         useACF: true,
         verboseOutput: false,

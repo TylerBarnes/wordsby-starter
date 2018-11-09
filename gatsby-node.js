@@ -4,16 +4,26 @@ const fs = require("fs");
 const glob = require("glob");
 
 const componentFileType = "js";
+const templatesPath = path.resolve(`./src/templates/`);
+const defaultTemplate = `${templatesPath}/single/index.js`;
+
+let existingTemplateFiles = glob.sync(`${templatesPath}/**/*.js`, {
+  dot: true
+});
+const templateJsonString = JSON.stringify(existingTemplateFiles);
+const filepath = path.resolve(`./public/templates.json`);
+
+var dir = "./public";
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
+}
+// Save templates array to the public folder. to be consumed by WP for template switching and preview urls
+fs.writeFile(filepath, new Buffer(templateJsonString, "utf8"), err => {
+  if (err) throw err;
+});
 
 exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;
-
-  const templatesPath = path.resolve(`./src/templates/`);
-  const defaultTemplate = `${templatesPath}/single/index.js`;
-
-  let existingTemplateFiles = glob.sync(`${templatesPath}/**/*.js`, {
-    dot: true
-  });
 
   if (!fs.existsSync(defaultTemplate)) {
     throw `default template doesn't exist at ${defaultTemplate}`;
@@ -54,12 +64,9 @@ exports.createPages = ({ actions, graphql }) => {
 
           createPage({
             path: pathname,
-            // component: path.resolve("./src/components/Preview.js"),
-            // component: defaultTemplate,
             component: template,
             context: {
-              id: result.data.wordpressWpCollections.wordpress_id,
-              template: template
+              id: result.data.wordpressWpCollections.wordpress_id
             }
           });
         });

@@ -21,12 +21,25 @@ export default class Preview extends Component {
     const nonce = urlParams.get("nonce");
 
     const rest_url = `/wp-json/wp/v2/${rest_base}/${post_id}/preview/?_wpnonce=${nonce}`;
-    // const rest_url_test = `http://gatsbywp.code/wp-json/wp/v2/${rest_base}/${post_id}/preview/`;
+    // const rest_url = `http://gatsbywpmamp.test/wp-json/wp/v2/${rest_base}/${post_id}/preview/`;
 
     console.log(rest_url);
+    // if (!rest_base || !post_id || !nonce) return;
+
+    // fetch(rest_url)
+    //   .then(res => {
+    //     // console.log(res.text());
+    //     return res.text();
+    //   })
+    //   .then(res => {
+    //     console.log(res);
+    //     // this.setState({ previewData: res });
+    //   });
 
     fetch(rest_url)
-      .then(res => res.json())
+      .then(res => {
+        return res.json();
+      })
       .then(res => {
         console.log(res);
         this.setState({ previewData: res });

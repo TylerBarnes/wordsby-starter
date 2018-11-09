@@ -51,8 +51,9 @@ exports.createPages = ({ actions, graphql }) => {
           const folderName =
             "/" + template.substring(indexOfFolderName + 1, indexOfFilename);
 
-          const pathname = `${folderName !== "/templates" &&
-            folderName}/${fileName}`;
+          const pathname = `${
+            folderName !== "/templates" ? folderName : ""
+          }/${fileName}`;
 
           createPage({
             path: pathname,

@@ -10,7 +10,7 @@ const Page = props => {
     <>
       <h1>{post_title}</h1>
       <h2>
-        <strong>Template:</strong> Default single index.
+        <strong>Template:</strong> single post index.
       </h2>
       <p>{post_content}</p>
     </>
@@ -20,7 +20,7 @@ const Page = props => {
 export default Page;
 
 export const CollectionQuery = graphql`
-  query DefaultById($id: Int!) {
+  query DefaultPostById($id: Int!) {
     wordpressWpCollections(wordpress_id: { eq: $id }) {
       post_title
       post_content

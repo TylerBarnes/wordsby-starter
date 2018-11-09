@@ -2,3 +2,5 @@
 // if (preview) {
 // exports.wrapPageElement = require("./wrap-page");
 // }
+
+exports.disableCorePrefetching = () => true;

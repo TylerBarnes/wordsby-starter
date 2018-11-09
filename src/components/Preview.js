@@ -5,7 +5,8 @@ export default class Preview extends Component {
     super(props);
 
     this.state = {
-      previewData: false
+      previewData: false,
+      error: false
     };
   }
   componentDidMount() {
@@ -21,20 +22,8 @@ export default class Preview extends Component {
     const nonce = urlParams.get("nonce");
 
     const rest_url = `/wp-json/wp/v2/${rest_base}/${post_id}/preview/?_wpnonce=${nonce}`;
-    // const rest_url = `http://gatsbywpmamp.test/wp-json/wp/v2/${rest_base}/${post_id}/preview/`;
 
     console.log(rest_url);
-    // if (!rest_base || !post_id || !nonce) return;
-
-    // fetch(rest_url)
-    //   .then(res => {
-    //     // console.log(res.text());
-    //     return res.text();
-    //   })
-    //   .then(res => {
-    //     console.log(res);
-    //     // this.setState({ previewData: res });
-    //   });
 
     fetch(rest_url)
       .then(res => {
@@ -42,7 +31,12 @@ export default class Preview extends Component {
       })
       .then(res => {
         console.log(res);
-        this.setState({ previewData: res });
+
+        if (res.post_title) {
+          this.setState({ previewData: res });
+        } else if (res.code) {
+          this.setState({ error: res });
+        }
       });
   }
   render() {

@@ -2,6 +2,7 @@ const _ = require("lodash");
 const path = require("path");
 const fs = require("fs");
 const glob = require("glob");
+const createTemplatesJson = require("./gpress-core/createTemplatesJson");
 
 const componentFileType = "js";
 const templatesPath = path.resolve(`./src/templates/`);
@@ -10,17 +11,10 @@ const defaultTemplate = `${templatesPath}/single/index.js`;
 let existingTemplateFiles = glob.sync(`${templatesPath}/**/*.js`, {
   dot: true
 });
-const templateJsonString = JSON.stringify(existingTemplateFiles);
-const filepath = path.resolve(`./public/templates.json`);
 
-var dir = "./public";
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir);
-}
-// Save templates array to the public folder. to be consumed by WP for template switching and preview urls
-fs.writeFile(filepath, new Buffer(templateJsonString, "utf8"), err => {
-  if (err) throw err;
-});
+createTemplatesJson({ existingTemplateFiles, templatesPath });
+
+return false;
 
 exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;

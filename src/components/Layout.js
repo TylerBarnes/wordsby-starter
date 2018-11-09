@@ -28,20 +28,20 @@ injectGlobal`
   }
 `;
 
+const preview = process.env.GATSBYPRESS_PREVIEW;
+
 const TemplateWrapper = props => (
   <div>
     <Helmet>
       <meta charSet="utf-8" />
     </Helmet>
 
-    {/* {page ? <MetaTag title={page.title} /> : ""} */}
-    {/* {team ? <MetaTag title={team.title} /> : ""} */}
-    {/* {project ? <MetaTag title={project.title} /> : ""} */}
-
-    {/* <Header logo={props.menuLogo} /> */}
-
     <Transition location={props.location}>
-      <Preview {...props}>{props.children}</Preview>
+      {preview ? (
+        <Preview {...props}>{props.children}</Preview>
+      ) : (
+        props.children
+      )}
     </Transition>
   </div>
 );

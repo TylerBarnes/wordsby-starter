@@ -2,3 +2,4 @@
 ☐ Setup default routing for taxonomy pages. Respect wether they should have an archive or not.
 ☐ Make sure taxonomy data is available in single post pages.
 ☐ upload built preview files to the server using an api key
+☐ set up preview loading component to look better.

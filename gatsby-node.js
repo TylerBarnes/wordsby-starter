@@ -14,8 +14,6 @@ let existingTemplateFiles = glob.sync(`${templatesPath}/**/*.js`, {
 
 createTemplatesJson({ existingTemplateFiles, templatesPath });
 
-return false;
-
 exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;
 

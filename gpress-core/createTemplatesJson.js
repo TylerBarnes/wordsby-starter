@@ -3,7 +3,7 @@ const path = require("path");
 
 const createTemplatesJson = ({ existingTemplateFiles, templatesPath }) => {
   const trimmedPaths = existingTemplateFiles.map(fullPath =>
-    fullPath.replace(templatesPath, "").replace(/\.js|\.jsx/gi, "")
+    fullPath.replace(templatesPath + "/", "").replace(/\.js|\.jsx/gi, "")
   );
 
   const templateJsonString = JSON.stringify(trimmedPaths);

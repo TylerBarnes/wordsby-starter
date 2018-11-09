@@ -10,6 +10,8 @@ form.submit(
   function(err, res) {
     if (res.statusCode !== 200) {
       console.error("Preview Files not uploaded. Check your settings.");
+      console.error(res.statusCode);
+      console.error(res.statusMessage);
     } else {
       console.log("Preview files uploaded successfully");
     }

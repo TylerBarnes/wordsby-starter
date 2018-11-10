@@ -2,7 +2,7 @@ const _ = require("lodash");
 const path = require("path");
 const fs = require("fs");
 const glob = require("glob");
-const createTemplatesJson = require("./gpress-core/createTemplatesJson");
+const createTemplatesJson = require("./gatsbypress/createTemplatesJson");
 
 const componentFileType = "js";
 const templatesPath = path.resolve(`./src/templates/`);

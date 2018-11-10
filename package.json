@@ -54,9 +54,9 @@
     "serve": "npm run clean && gatsby serve",
     "format": "prettier --trailing-comma es5 --no-semi --single-quote --write \"{gatsby-*.js,src/**/*.js}\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "wp": "GATSBYPRESS_PREVIEW=true NO_PREFETCH=true gatsby build --prefix-paths && node ./gpress-core/zipPreview && node ./gpress-core/uploadPreviews && npm run clean && rimraf templates-previews.zip",
-    "wptest": "GATSBYPRESS_PREVIEW=true NO_PREFETCH=true gatsby build --prefix-paths && node ./gpress-core/zipPreview",
-    "wppush": "node ./gpress-core/uploadPreviews"
+    "wp": "GATSBYPRESS_PREVIEW=true NO_PREFETCH=true gatsby build --prefix-paths && node ./gatsbypress/zipPreview && node ./gatsbypress/uploadPreviews && npm run clean && rimraf templates-previews.zip",
+    "wptest": "GATSBYPRESS_PREVIEW=true NO_PREFETCH=true gatsby build --prefix-paths && node ./gatsbypress/zipPreview",
+    "wppush": "node ./gatsbypress/uploadPreviews"
   },
   "devDependencies": {
     "prettier": "^1.14.3",

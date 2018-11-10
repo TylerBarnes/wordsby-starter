@@ -1,5 +1,7 @@
+const previewPrefix = require("./gatsbypress/previewPrefix");
+
 module.exports = {
-  pathPrefix: "/preview",
+  pathPrefix: previewPrefix(),
   siteMetadata: {
     title: "GatsbyPress Starter"
   },
@@ -50,12 +52,9 @@ module.exports = {
         icon: "src/favicon.png",
         baseUrl: "gatsbywpmamp.test",
         protocol: "http",
-        useACF: true,
+        // useACF: true,
         verboseOutput: false,
-        // Exclude specific routes using glob parameters
-        // See: https://github.com/isaacs/minimatch
-        // Example:  `["/*/*/comments", "/yoast/**"]` will exclude routes ending in `comments` and
-        // all routes that begin with `yoast` from fetch.
+        // acfOptionPageIds: ["gatsby"],
         excludedRoutes: [
           "/*/*/comments",
           "/yoast/**",
@@ -85,12 +84,12 @@ module.exports = {
           "**/acf/v3/users",
           "**/preview",
           "**/preview/**"
-        ]
-        // Search and Replace Urls across WordPress content.
-        // searchAndReplaceContentUrls: {
-        //   sourceUrl: "https://sunshine.bare.ca(?!/wp-content/)",
-        //   replacementUrl: ""
-        // }
+        ],
+        previewApiKeys: {
+          public: "fjdklafh8a89728437a789hj1",
+          private:
+            "8dSF9}C>De{,q{b~G<*}tJUSH,@./R->.:YAj|FU8F>=9}~4vZaIa_I15;{h(S.r"
+        }
       }
     },
     {

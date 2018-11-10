@@ -5,6 +5,7 @@
   "author": "Tyler Barnes",
   "dependencies": {
     "archiver": "^3.0.0",
+    "better-react-spinkit": "^2.0.4",
     "compass-vertical-rhythm": "^1.4.5",
     "emotion": "^9.2.12",
     "emotion-server": "^9.2.12",
@@ -58,7 +59,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "wp": "GATSBYPRESS_PREVIEW=true NO_PREFETCH=true gatsby build --prefix-paths && node ./gatsbypress/zipPreview && node ./gatsbypress/uploadPreviews && npm run clean && rimraf templates-previews.zip",
     "wptest": "GATSBYPRESS_PREVIEW=true NO_PREFETCH=true gatsby build --prefix-paths && node ./gatsbypress/zipPreview",
-    "wppush": "node ./gatsbypress/uploadPreviews"
+    "wppush": "node ./gatsbypress/uploadPreviews",
+    "devpreview": "GATSBYPRESS_PREVIEW=true gatsby develop"
   },
   "devDependencies": {
     "prettier": "^1.14.3",

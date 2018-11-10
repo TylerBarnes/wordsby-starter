@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PreviewLoader from "./PreviewLoader";
 
 export default class Preview extends Component {
   constructor(props) {
@@ -55,7 +56,7 @@ export default class Preview extends Component {
 
       return childrenWithPreview;
     } else {
-      return <h1>Loading</h1>;
+      return <PreviewLoader />;
     }
   }
 }

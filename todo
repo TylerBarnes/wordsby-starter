@@ -8,3 +8,4 @@
     ✔ private api key @done(18-11-09 18:53)
     ✔ site url @done(18-11-09 18:53)
 ☐ set up preview loading component to look better.
+☐ instead of excluding routes, just include the ones we want

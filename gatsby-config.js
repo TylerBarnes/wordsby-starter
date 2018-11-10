@@ -18,7 +18,6 @@ module.exports = {
         icon: "src/favicon.png" // This path is relative to the root of the site.
       }
     },
-    // "gatsby-plugin-offline",
     {
       resolve: "gatsby-plugin-layout",
       options: {

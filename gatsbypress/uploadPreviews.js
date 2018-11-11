@@ -14,20 +14,19 @@ if (!wordpressconfig || !wordpressconfig.previewApiKeys) {
 
 const wpUrl = `${wordpressconfig.protocol}://${wordpressconfig.baseUrl}`;
 
-const public_key = wordpressconfig.previewApiKeys.public;
+// const public_key = wordpressconfig.previewApiKeys.public;
 const private_key = wordpressconfig.previewApiKeys.private;
 
-if (!public_key || !private_key) {
-  throw Error(
-    `You need to specify both a public and a private api key for previews.`
-  );
+if (!private_key) {
+  throw Error(`You need to specify a private api key to upload previews.`);
 }
 
-const uploader_url = `${wpUrl}/${public_key}.php`;
+const uploader_url = `${wpUrl}`;
 
 var form = new FormData();
 
 form.append("apikey", private_key);
+form.append("gatsbypress_previews", "gatsbypress_previews");
 form.append("previews", fs.createReadStream("./templates-previews.zip"));
 
 form.submit(uploader_url, function(err, res) {

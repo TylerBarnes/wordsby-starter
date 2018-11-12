@@ -22,7 +22,15 @@ export default class Preview extends Component {
     const post_id = urlParams.get("preview");
     const nonce = urlParams.get("nonce");
 
-    if (!rest_base || !post_id || !nonce) return;
+    if (!rest_base || !post_id || !nonce) {
+      return this.setState({
+        error: {
+          title: "Oops...",
+          message:
+            'It looks like this page was accessed directly.<br> For a preview, log in to wordpress and click the "Preview" button from the edit screen.'
+        }
+      });
+    }
 
     const rest_url = `/wp-json/wp/v2/${rest_base}/${post_id}/preview/?_wpnonce=${nonce}`;
 
@@ -30,6 +38,7 @@ export default class Preview extends Component {
 
     fetch(rest_url)
       .then(res => {
+        console.log(res);
         return res.json();
       })
       .then(res => {
@@ -38,7 +47,15 @@ export default class Preview extends Component {
         if (res.ID) {
           this.setState({ previewData: res });
         } else if (res.code) {
-          this.setState({ error: res });
+          this.setState({
+            error: {
+              title: "Oh no! <br> There's been an error :(",
+              message: `To fix: <br>
+                        Close this page, log out of WordPress, log back in, and try again.<br>
+                        If the issue persists, copy this message and send it to your web developer.`,
+              error: res
+            }
+          });
         }
       });
   }
@@ -56,7 +73,7 @@ export default class Preview extends Component {
 
       return childrenWithPreview;
     } else {
-      return <PreviewLoader />;
+      return <PreviewLoader error={this.state.error} />;
     }
   }
 }

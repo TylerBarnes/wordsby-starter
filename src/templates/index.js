@@ -9,6 +9,7 @@ export default function home(props) {
   return (
     <>
       {!!post_title && <h1>{post_title}</h1>}
+      <h2>Default template</h2>
       {!!post_content && (
         <div dangerouslySetInnerHTML={{ __html: post_content }} />
       )}
@@ -17,7 +18,7 @@ export default function home(props) {
 }
 
 export const CollectionQuery = graphql`
-  query DefaultSinglePost($id: Int!) {
+  query DefaultSingle($id: Int!) {
     wordpressWpCollections(wordpress_id: { eq: $id }) {
       post_title
       post_content

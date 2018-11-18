@@ -1,102 +1,125 @@
-const previewPrefix = require("./gatsbypress/previewPrefix");
+const wordsbyConfig = {
+  siteName: "Torque Strategies",
+  shortName: "Torque",
+  siteDescription: "A Wordsby site for Torque Strategies (late 2018)",
+  url: {
+    base: "torque2018.barework.com",
+    protocol: "https",
+    pathPrefix: false
+  },
+  manifest: {
+    background_color: "#6b37bf",
+    theme_color: "#6b37bf",
+    display: "minimal-ui"
+  },
+  keys: {
+    previewToken: "CtVjbOKpsz_Rk5PLoSoRF7jKam2JazBkSWu1DzUpEmfILgqHgmz__B6L",
+    googleAnalyticsID: false
+  }
+};
 
-module.exports = {
-  pathPrefix: previewPrefix(),
+const previewPrefix = require("wordsby/preview");
+const fullUrl = `${wordsbyConfig.url.protocol}://${wordsbyConfig.url.base}`;
+
+const gatsbyConfig = {
+  pathPrefix: previewPrefix(), // if you need to add a prefix to this site, pass it as a string eg. previewPrefix("/some-prefix").
   siteMetadata: {
-    title: "GatsbyPress Starter"
+    siteUrl: fullUrl
   },
   plugins: [
     {
-      resolve: "gatsby-plugin-manifest",
+      resolve: `gatsby-plugin-emotion`,
       options: {
-        name: "GatsbyPress Starter",
-        short_name: "GatsbyPress",
-        start_url: "/",
-        background_color: "#6b37bf",
-        theme_color: "#6b37bf",
-        display: "minimal-ui",
-        icon: "src/favicon.png" // This path is relative to the root of the site.
+        // Accepts all options defined by `babel-plugin-emotion` plugin.
       }
     },
-    {
-      resolve: "gatsby-plugin-layout",
-      options: {
-        component: require.resolve("./src/components/Layout")
-      }
-    },
-    {
-      resolve: "gatsby-plugin-google-fonts",
-      options: {
-        fonts: [
-          "poppins:300,400" // you can also specify font weights and styles
-        ]
-      }
-    },
-    "gatsby-plugin-react-helmet",
-    "gatsby-plugin-sass",
-    {
-      resolve: "gatsby-plugin-emotion"
-    },
-    "gatsby-plugin-sharp",
-    "gatsby-transformer-sharp",
     {
       resolve: "gatsby-source-wordpress",
       options: {
-        name: "GatsbyPress Starter",
-        short_name: "GatsbyPress",
-        start_url: "/",
-        background_color: "#6b37bf",
-        theme_color: "#6b37bf",
+        name: wordsbyConfig.siteName,
+        short_name: wordsbyConfig.shortName,
+        start_url: wordsbyConfig.url.startUrl
+          ? wordsbyConfig.url.startUrl
+          : "/",
+        background_color: wordsbyConfig.manifest.background_color,
+        theme_color: wordsbyConfig.manifest.theme_color,
         display: "minimal-ui",
         icon: "src/favicon.png",
-        baseUrl: "gatsbywpmamp.test",
-        protocol: "http",
-        // useACF: true,
+        baseUrl: wordsbyConfig.url.base,
+        protocol: wordsbyConfig.url.protocol,
+        useACF: false, // this should be false as the wordsby rest api endpoint has ACF built in.
         verboseOutput: false,
-        // acfOptionPageIds: ["gatsby"],
-        excludedRoutes: [
-          "/*/*/comments",
-          "/yoast/**",
-          "/oembed/**",
-          "**/statuses",
-          "**/users/**",
-          "**/users",
-          "**/settings",
-          "**/pages/**",
-          "**/pages",
-          "**/posts/**",
-          "**/posts",
-          "**/menu-locations/**",
-          "**/menu-locations",
-          "**/menus/**",
-          "**/wp/v1",
-          "**/wp/v2",
-          "**/acf/v3/categories",
-          "**/acf/v3/categories/**",
-          "**/acf/v3/posts/**",
-          "**/acf/v3/posts",
-          "**/acf/v3/pages/**",
-          "**/acf/v3/pages",
-          "**/acf/v3/media/**",
-          "**/acf/v3/media",
-          "**/acf/v3/users/**",
-          "**/acf/v3/users",
-          "**/preview",
-          "**/preview/**"
+        includedRoutes: [
+          "**/wp-api-menus/v2/",
+          "**/wp-api-menus/v2/**",
+          "**/wp/v1/collections",
+          "**/wp/v2/taxonomies",
+          "**/wp/v2/media",
+          "**/wp/v2/media/(?P<id>[d]+)"
         ],
-        previewApiKeys: {
-          public: "fjdklafh8a89728437a789hj1",
-          private:
-            "8dSF9}C>De{,q{b~G<*}tJUSH,@./R->.:YAj|FU8F>=9}~4vZaIa_I15;{h(S.r"
+        searchAndReplaceContentUrls: {
+          sourceUrl: `${fullUrl}(?!/wp-content/)`, // this replaces all urls except for media library links allowing us to use the WP permalink structure.
+          replacementUrl: ""
         }
       }
     },
     {
-      resolve: "gatsby-plugin-react-svg",
+      resolve: "wordsby",
       options: {
-        include: "/src/visuals/svg/"
+        previewToken: wordsbyConfig.keys.previewToken
       }
     },
-    "gatsby-plugin-netlify" // make sure to keep it last in the array
+    "gatsby-plugin-react-helmet",
+    "gatsby-plugin-lodash",
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "assets",
+        path: `${__dirname}/static/`
+      }
+    },
+    {
+      resolve: "gatsby-plugin-nprogress",
+      options: {
+        color: wordsbyConfig.themeColor
+      }
+    },
+    "gatsby-plugin-sharp",
+    "gatsby-transformer-sharp",
+    "gatsby-plugin-catch-links",
+    {
+      resolve: "gatsby-plugin-sitemap",
+      options: {
+        query: `{
+          site {
+            siteMetadata {
+              siteUrl
+            }
+          }
+          allSitePage(filter: {context: {id: {ne: null}}}) {
+            edges {
+              node {
+                path
+                context {
+                  id
+                }
+              }
+            }
+          }
+      }`
+      }
+    },
+    "gatsby-plugin-offline"
   ]
 };
+
+if (wordsbyConfig.keys.googleAnalyticsID) {
+  gatsbyConfig.plugins.push({
+    resolve: "gatsby-plugin-google-analytics",
+    options: {
+      trackingId: wordsbyConfig.keys.googleAnalyticsID
+    }
+  });
+}
+
+module.exports = gatsbyConfig;

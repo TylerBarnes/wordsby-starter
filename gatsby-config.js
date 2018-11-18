@@ -1,9 +1,9 @@
 const wordsbyConfig = {
-  siteName: "Torque Strategies",
-  shortName: "Torque",
-  siteDescription: "A Wordsby site for Torque Strategies (late 2018)",
+  siteName: "TransitionLink Docs",
+  shortName: "TransitionLink",
+  siteDescription: "A Wordsby site for gatsby-plugin-transition-link (late 2018)",
   url: {
-    base: "torque2018.barework.com",
+    base: "transitionlink.temperance.online",
     protocol: "https",
     pathPrefix: false
   },
@@ -13,7 +13,7 @@ const wordsbyConfig = {
     display: "minimal-ui"
   },
   keys: {
-    previewToken: "CtVjbOKpsz_Rk5PLoSoRF7jKam2JazBkSWu1DzUpEmfILgqHgmz__B6L",
+    previewToken: "test",
     googleAnalyticsID: false
   }
 };

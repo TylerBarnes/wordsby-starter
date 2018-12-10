@@ -2,10 +2,13 @@
 ✘ Setup default routing for taxonomy pages. Respect wether they should have an archive or not. @cancelled(18-11-09 19:52) This is too intense. Tax archive pages can be created manually with a wp page/template or gatsby page or per project in gatsby-node if needed.
 ✔ Make sure taxonomy data is available in single post pages. @done(18-11-09 19:52)
 ✔ upload built preview files to the server using an api key @done(18-11-09 18:03)
-☐ make gatsbypress an npm package / gatsby plugin.
+✔ make gatsbypress an npm package / gatsby plugin. @done(18-12-09 13:11)
     Settings:
     ✔ public api key @done(18-11-09 18:53)
     ✔ private api key @done(18-11-09 18:53)
     ✔ site url @done(18-11-09 18:53)
 ✔ set up preview loading component to look better. @done(18-11-09 20:20)
-☐ instead of excluding routes, just include the ones we want
+✔ instead of excluding routes, just include the ones we want @done(18-12-09 13:11)
+
+☐ finish gatsby-config
+☐ set up local WP install

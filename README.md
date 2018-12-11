@@ -1,4 +1,1 @@
-# Wordsby Front (ALPHA)
-
-
-# ty.js
+# Wordsby Starter

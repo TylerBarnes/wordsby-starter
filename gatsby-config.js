@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const wordsbyConfig = {
-  siteName: "Wordsby Front",
+  siteName: "Wordsby Starter",
   shortName: "Wordsby",
   siteDescription: "A Wordsby starter",
   url: {

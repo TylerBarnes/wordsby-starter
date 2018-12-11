@@ -1,16 +1,15 @@
-import React from 'react'
-import { graphql, Link } from 'gatsby'
-import Edges from '../../../components/Edges'
+import React from "react";
+import { graphql, Link } from "gatsby";
 
 export default function home(props) {
   const {
     data: {
-      allWordpressWpCollections: { edges: posts },
-    },
-  } = props
+      allWordpressWpCollections: { edges: posts }
+    }
+  } = props;
 
   return (
-    <Edges>
+    <>
       <h1>Default Single Term template</h1>
       {!!posts &&
         posts.map(({ node: post }) => {
@@ -18,10 +17,10 @@ export default function home(props) {
             <div key={post.pathname}>
               <Link to={post.pathname}>{post.post_title}</Link>
             </div>
-          )
+          );
         })}
-    </Edges>
-  )
+    </>
+  );
 }
 
 export const CollectionQuery = graphql`
@@ -37,4 +36,4 @@ export const CollectionQuery = graphql`
       }
     }
   }
-`
+`;

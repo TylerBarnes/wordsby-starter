@@ -1,20 +1,20 @@
-import React from 'react'
-import { graphql, Link } from 'gatsby'
-import Grid from 'styled-components-grid'
-import InnerLayout from '../../layout/InnerLayout'
-import Img from 'gatsby-image'
-import Sidebar from '../../components/Sidebar'
-import Edges from '../../components/Edges'
-import excerptHtml from 'excerpt-html'
-import Parser from 'html-react-parser'
+import React from "react";
+import { graphql, Link } from "gatsby";
+import Grid from "styled-components-grid";
+import InnerLayout from "../../layout/InnerLayout";
+import Img from "gatsby-image";
+import Sidebar from "../../components/Sidebar";
+import Edges from "../../components/Edges";
+import excerptHtml from "excerpt-html";
+import Parser from "html-react-parser";
 
 export default function home(props) {
   const {
     wordpressWpCollections: { post_title },
-    posts: { edges: posts },
-  } = props.data
+    posts: { edges: posts }
+  } = props.data;
 
-  const { previousPagePath, nextPagePath } = props.pageContext
+  const { previousPagePath, nextPagePath } = props.pageContext;
 
   return (
     <InnerLayout>
@@ -30,9 +30,9 @@ export default function home(props) {
               posts.map(({ node: post }) => {
                 const {
                   taxonomies: {
-                    category: { pathname, terms },
-                  },
-                } = post
+                    category: { pathname, terms }
+                  }
+                } = post;
 
                 return (
                   <Grid key={post.post_title}>
@@ -45,7 +45,7 @@ export default function home(props) {
                             }
                           />
                         ) : (
-                          'Placeholder'
+                          "Placeholder"
                         )}
                       </Link>
                     </Grid.Unit>
@@ -56,7 +56,7 @@ export default function home(props) {
                           <Link key={index} to={`${pathname}${term.slug}`}>
                             {term.name}
                           </Link>
-                        )
+                        );
                       })}
 
                       <Link to={post.pathname}>
@@ -72,7 +72,7 @@ export default function home(props) {
                       </Link>
                     </Grid.Unit>
                   </Grid>
-                )
+                );
               })}
 
             {!!previousPagePath && (
@@ -83,7 +83,7 @@ export default function home(props) {
         </Grid>
       </Edges>
     </InnerLayout>
-  )
+  );
 }
 
 export const CollectionQuery = graphql`
@@ -98,15 +98,6 @@ export const CollectionQuery = graphql`
           post_title
           post_content
           pathname
-          featured_img {
-            localFile {
-              childImageSharp {
-                fluid(maxWidth: 500) {
-                  ...GatsbyImageSharpFluid_withWebp_tracedSVG
-                }
-              }
-            }
-          }
           taxonomies {
             category {
               pathname
@@ -124,4 +115,4 @@ export const CollectionQuery = graphql`
       post_title
     }
   }
-`
+`;

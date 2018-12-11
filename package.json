@@ -1,15 +1,16 @@
 {
-  "name": "gatsby-starter-gatsbypress",
-  "description": "Example Gatsbypress project",
-  "version": "1.1.3",
+  "name": "gatsby-starter-wordsby",
+  "description": "Example Wordsby project",
+  "version": "0.0.1",
   "author": "Tyler Barnes",
   "dependencies": {
     "babel-plugin-styled-components": "^1.9.2",
-    "better-react-spinkit": "^2.0.4",
     "dotenv": "^6.2.0",
+    "excerpt-html": "^1.2.0",
     "gatsby": "2.0.64",
     "gatsby-image": "^2.0.22",
     "gatsby-plugin-catch-links": "^2.0.9",
+    "gatsby-plugin-favicon": "^3.1.4",
     "gatsby-plugin-google-fonts": "^0.0.4",
     "gatsby-plugin-manifest": "^2.0.11",
     "gatsby-plugin-netlify": "^2.0.6",
@@ -25,6 +26,7 @@
     "gatsby-source-filesystem": "^2.0.11",
     "gatsby-source-wordpress": "^3.0.19",
     "gatsby-transformer-sharp": "^2.1.9",
+    "html-react-parser": "^0.4.7",
     "lodash": "^4.17.11",
     "lodash-webpack-plugin": "^0.11.4",
     "minireset.css": "^0.0.3",
@@ -36,7 +38,8 @@
     "styled-components": "^4.1.2",
     "tyjs": "^0.0.2",
     "uuid": "^3.2.1",
-    "wordsby": "^0.5.0"
+    "wordsby": "^0.5.1",
+    "wordsby-components": "0.0.4"
   },
   "keywords": [
     "gatsby",

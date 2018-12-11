@@ -1,5 +1,5 @@
 import React from "react";
-import DemoTypography from "../components/DemoTypography";
+import DemoTypography from "../components/demo/DemoTypography";
 
 const Home = () => {
   return (

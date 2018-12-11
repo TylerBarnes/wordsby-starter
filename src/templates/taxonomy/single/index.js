@@ -25,7 +25,12 @@ export default function home(props) {
 
 export const CollectionQuery = graphql`
   query DefaultTaxonomyTermSingle($slug: String!) {
-    allWordpressWpCollections(filter: { term_slugs: { in: [$slug] } }) {
+    allWordpressWpCollections(
+      filter: {
+        term_slugs: { in: [$slug] }
+        post_title: { ne: "schema_builder" }
+      }
+    ) {
       edges {
         node {
           post_title

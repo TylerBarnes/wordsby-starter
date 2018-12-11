@@ -2,7 +2,11 @@ import React from "react";
 import { graphql } from "gatsby";
 
 export default function contact(props) {
-  return <div />;
+  return (
+    <>
+      <h1>Contact Template</h1>
+    </>
+  );
 }
 
 export const CollectionQuery = graphql`

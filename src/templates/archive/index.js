@@ -1,13 +1,13 @@
-import React from 'react'
-import { graphql, Link } from 'gatsby'
+import React from "react";
+import { graphql, Link } from "gatsby";
 
 export default function home(props) {
   const {
     wordpressWpCollections: { post_title, post_content },
-    posts: { edges: posts },
-  } = props.data
+    posts: { edges: posts }
+  } = props.data;
 
-  const { previousPagePath, nextPagePath } = props.pageContext
+  const { previousPagePath, nextPagePath } = props.pageContext;
 
   return (
     <>
@@ -27,11 +27,11 @@ export default function home(props) {
       {!!previousPagePath && <Link to={previousPagePath}>Previous page</Link>}
       {!!nextPagePath && <Link to={nextPagePath}>Next page</Link>}
     </>
-  )
+  );
 }
 
 export const CollectionQuery = graphql`
-  query($skip: Int!, $limit: Int!, $post_type: String!, $id: Int!) {
+  query($skip: Int, $limit: Int, $post_type: String, $id: Int) {
     posts: allWordpressWpCollections(
       filter: { post_type: { eq: $post_type } }
       skip: $skip # This was added by the plugin
@@ -51,4 +51,4 @@ export const CollectionQuery = graphql`
       post_content
     }
   }
-`
+`;

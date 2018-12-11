@@ -8,15 +8,16 @@ export default function home(props) {
   } = props.data;
 
   return (
-    <div>
-      <h1>{post_title}</h1>
-      {!!post_content && Parser(post_content)}
-    </div>
+    <>
+      {!!post_title && <h1>{post_title}</h1>}
+      <h2>About template</h2>
+      {!!post_content && <div>{Parser(post_content)}</div>}
+    </>
   );
 }
 
 export const CollectionQuery = graphql`
-  query DefaultSinglePost($id: Int!) {
+  query AboutTemplate($id: Int!) {
     wordpressWpCollections(wordpress_id: { eq: $id }) {
       post_title
       post_content

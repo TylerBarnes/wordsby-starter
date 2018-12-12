@@ -14,6 +14,7 @@ export default function home(props) {
 
   return (
     <>
+      <h1>Default Post Archive</h1>
       {!!post_title && <h1>{post_title}</h1>}
       {!!posts &&
         posts.map(({ node: post }) => {
@@ -22,12 +23,10 @@ export default function home(props) {
           } = post;
 
           return (
-            <>
+            <div key={post.post_title}>
               <Link to={post.pathname}>
                 {post.featured_img ? (
-                  <Img
-                    fluid={post.featured_img.localFile.childImageSharp.fluid}
-                  />
+                  <Img field={post.featured_img} />
                 ) : (
                   "Placeholder"
                 )}
@@ -53,7 +52,7 @@ export default function home(props) {
               <Link to={post.pathname}>
                 <button>Read more</button>
               </Link>
-            </>
+            </div>
           );
         })}
 
@@ -81,6 +80,7 @@ export const CollectionQuery = graphql`
               terms {
                 name
                 slug
+                pathname
               }
             }
           }

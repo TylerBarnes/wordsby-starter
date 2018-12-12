@@ -12,7 +12,7 @@ export default function home(props) {
   return (
     <>
       {!!post_title && <h1>{post_title}</h1>}
-      <h2>Default template</h2>
+      <h2>Default Archive template</h2>
       {!!post_content && (
         <div dangerouslySetInnerHTML={{ __html: post_content }} />
       )}

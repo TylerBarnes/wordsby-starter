@@ -51,6 +51,7 @@
   "main": "n/a",
   "scripts": {
     "clean": "rimraf .cache public",
+    "build": "gatsby build",
     "develop": "npm run clean && gatsby develop",
     "serve": "npm run clean && gatsby serve",
     "format": "prettier --trailing-comma es5 --no-semi --single-quote --write \"{gatsby-*.js,src/**/*.js}\"",

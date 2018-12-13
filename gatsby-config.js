@@ -57,6 +57,7 @@ const gatsbyConfig = {
           "**/wp-api-menus/v2/",
           "**/wp-api-menus/v2/**",
           "**/wp/v1/collections",
+          "**/wp/v1/all-options",
           "**/wp/v1/tax-terms",
           "**/wp/v2/media"
         ]

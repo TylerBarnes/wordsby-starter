@@ -7,8 +7,8 @@
     "babel-plugin-styled-components": "^1.9.4",
     "dotenv": "^6.2.0",
     "excerpt-html": "^1.2.0",
-    "gatsby": "2.0.66",
-    "gatsby-image": "^2.0.23",
+    "gatsby": "2.0.67",
+    "gatsby-image": "^2.0.25",
     "gatsby-plugin-catch-links": "^2.0.9",
     "gatsby-plugin-favicon": "^3.1.4",
     "gatsby-plugin-google-fonts": "^0.0.4",
@@ -39,8 +39,8 @@
     "styled-components": "^4.1.2",
     "tyjs": "^0.0.2",
     "uuid": "^3.2.1",
-    "wordsby": "^0.5.2",
-    "wordsby-components": "0.0.10"
+    "wordsby": "^0.5.3",
+    "wordsby-components": "0.0.12"
   },
   "keywords": [
     "gatsby",

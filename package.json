@@ -25,7 +25,6 @@
     "gatsby-plugin-transition-link": "^1.4.2",
     "gatsby-plugin-wordsby": "^0.0.3",
     "gatsby-source-filesystem": "^2.0.12",
-    "gatsby-source-wordpress": "^3.0.20",
     "gatsby-transformer-sharp": "^2.1.9",
     "html-react-parser": "^0.4.7",
     "lodash": "^4.17.11",
@@ -40,7 +39,7 @@
     "styled-components": "^4.1.2",
     "tyjs": "^0.0.2",
     "uuid": "^3.2.1",
-    "wordsby": "^0.6.0",
+    "wordsby": "^0.6.1",
     "wordsby-components": "0.0.14"
   },
   "keywords": [

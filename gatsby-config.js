@@ -1,33 +1,10 @@
 require("dotenv").config();
-
-const wordsbyConfig = {
-  siteName: "Wordsby Starter",
-  shortName: "Wordsby",
-  siteDescription: "A Wordsby starter",
-  url: {
-    base: "wordsby.test",
-    protocol: "http",
-    pathPrefix: false,
-    startUrl: false
-  },
-  manifest: {
-    background_color: "#6b37bf",
-    theme_color: "#6b37bf",
-    display: "minimal-ui"
-  },
-  keys: {
-    previewToken: process.env.PREVIEW_TOKEN,
-    googleAnalyticsID: false
-  }
-};
-
 const previewPrefix = require("wordsby/preview");
-const fullUrl = `${wordsbyConfig.url.protocol}://${wordsbyConfig.url.base}`;
 
 const gatsbyConfig = {
-  pathPrefix: previewPrefix(wordsbyConfig.pathPrefix), // if you need to add a prefix to this site, pass it as a string eg. previewPrefix("/some-prefix").
+  pathPrefix: previewPrefix(), // if you need to add a prefix to this site, pass it as a string eg. previewPrefix("/some-prefix").
   siteMetadata: {
-    siteUrl: fullUrl
+    siteUrl: `http://wordsby.test`
   },
   plugins: [
     `gatsby-plugin-styled-components`,
@@ -38,35 +15,16 @@ const gatsbyConfig = {
       }
     },
     {
-      resolve: "gatsby-source-wordpress",
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: wordsbyConfig.siteName,
-        short_name: wordsbyConfig.shortName,
-        start_url: wordsbyConfig.url.startUrl
-          ? wordsbyConfig.url.startUrl
-          : "/",
-        background_color: wordsbyConfig.manifest.background_color,
-        theme_color: wordsbyConfig.manifest.theme_color,
-        display: "minimal-ui",
-        icon: "src/favicon.png",
-        baseUrl: wordsbyConfig.url.base,
-        protocol: wordsbyConfig.url.protocol,
-        useACF: false, // this should be false as the wordsby rest api endpoint has ACF built in.
-        verboseOutput: false,
-        includedRoutes: [
-          "**/wp-api-menus/v2/",
-          "**/wp-api-menus/v2/**",
-          "**/wp/v1/collections",
-          "**/wp/v1/all-options",
-          "**/wp/v1/tax-terms",
-          "**/wp/v2/media"
-        ]
+        name: "wordsby",
+        path: `${__dirname}/wordsby/`
       }
     },
     {
-      resolve: "wordsby",
+      resolve: "gatsby-plugin-wordsby",
       options: {
-        previewToken: wordsbyConfig.keys.previewToken
+        previewToken: process.env.PREVIEW_TOKEN
       }
     },
     "gatsby-plugin-react-helmet",
@@ -80,7 +38,7 @@ const gatsbyConfig = {
     {
       resolve: "gatsby-plugin-nprogress",
       options: {
-        color: wordsbyConfig.themeColor
+        color: "rebeccapurple"
       }
     },
     "gatsby-plugin-sharp",
@@ -135,17 +93,17 @@ if (process.env.NODE_ENV === "production") {
   gatsbyConfig.plugins.push("gatsby-plugin-favicon");
 }
 
-if (
-  wordsbyConfig.keys.googleAnalyticsID &&
-  process.env.NODE_ENV === "production" &&
-  !process.env.WORDSBY_PREVIEW
-) {
-  gatsbyConfig.plugins.push({
-    resolve: "gatsby-plugin-google-analytics",
-    options: {
-      trackingId: wordsbyConfig.keys.googleAnalyticsID
-    }
-  });
-}
+// if (
+//   wordsbyConfig.keys.googleAnalyticsID &&
+//   process.env.NODE_ENV === "production" &&
+//   !process.env.WORDSBY_PREVIEW
+// ) {
+//   gatsbyConfig.plugins.push({
+//     resolve: "gatsby-plugin-google-analytics",
+//     options: {
+//       trackingId: wordsbyConfig.keys.googleAnalyticsID
+//     }
+//   });
+// }
 
 module.exports = gatsbyConfig;

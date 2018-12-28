@@ -9,16 +9,13 @@ export default ({ slug: propSlug, children }) => {
         <StaticQuery
           query={graphql`
             {
-              wordpressSiteMetadata {
-                url
-              }
-              allWordpressWpApiMenusMenusItems {
+              allWordsbyMenus {
                 edges {
                   node {
                     slug
                     items {
                       title
-                      url
+                      pathname
                       wordpress_id
                     }
                   }
@@ -26,24 +23,16 @@ export default ({ slug: propSlug, children }) => {
               }
             }
           `}
-          render={({
-            allWordpressWpApiMenusMenusItems: wpmenu,
-            wordpressSiteMetadata: { url }
-          }) => {
+          render={({ allWordsbyMenus: wpmenu }) => {
             const menu = wpmenu.edges.filter(
               ({ node }) => node.slug === propSlug
             );
 
             const items = menu.length > 0 ? menu[0].node.items : false;
 
-            // remove the WP site url from menu links.
-            for (const item of items) {
-              item.url = item.url.replace(url, "");
-            }
-
             if (items) {
               items.forEach(item => {
-                item.active = !!(item.url === pathname);
+                item.active = !!(item.pathname === pathname);
                 item.activeParent = !!(
                   !item.active && pathname.startsWith(item.url)
                 );
@@ -56,7 +45,10 @@ export default ({ slug: propSlug, children }) => {
               ) : (
                 <>
                   {items.map(item => (
-                    <Link key={`menu-item-${item.wordpress_id}`} to={item.url}>
+                    <Link
+                      key={`menu-item-${item.wordpress_id}`}
+                      to={item.pathname}
+                    >
                       {item.title}
                     </Link>
                   ))}

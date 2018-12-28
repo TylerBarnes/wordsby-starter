@@ -4,7 +4,7 @@ import Parser from "html-react-parser";
 
 export default function home(props) {
   const {
-    wordpressWpCollections: { post_title, post_content }
+    wordsbyCollections: { post_title, post_content }
   } = props.data;
 
   return (
@@ -18,7 +18,7 @@ export default function home(props) {
 
 export const CollectionQuery = graphql`
   query AboutTemplate($id: Int!) {
-    wordpressWpCollections(wordpress_id: { eq: $id }) {
+    wordsbyCollections(ID: { eq: $id }) {
       post_title
       post_content
     }

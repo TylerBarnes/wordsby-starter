@@ -40,7 +40,7 @@ export default function contact(props) {
 
 export const CollectionQuery = graphql`
   query ContactTemplate($id: Int!) {
-    wordpressWpCollections(wordpress_id: { eq: $id }) {
+    wordsbyCollections(ID: { eq: $id }) {
       post_title
       post_content
     }

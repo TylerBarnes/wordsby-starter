@@ -8,10 +8,10 @@ const MainMenu = () => {
     <Menu>
       <MenuItems slug="main-menu">
         {items => {
-          return items.map(({ url, active, activeParent, title }) => (
+          return items.map(({ pathname, active, activeParent, title }) => (
             <Link
-              key={url}
-              to={url}
+              key={pathname}
+              to={pathname}
               className={active || activeParent ? "active" : ""}
             >
               {title}

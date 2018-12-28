@@ -6,7 +6,7 @@ import excerptHtml from "excerpt-html";
 
 export default function home(props) {
   const {
-    wordpressWpCollections: { post_title },
+    wordsbyCollections: { post_title },
     posts: { edges: posts }
   } = props.data;
 
@@ -64,7 +64,7 @@ export default function home(props) {
 
 export const CollectionQuery = graphql`
   query($skip: Int, $limit: Int, $post_type: String, $id: Int) {
-    posts: allWordpressWpCollections(
+    posts: allWordsbyCollections(
       filter: { post_type: { eq: $post_type } }
       skip: $skip
       limit: $limit
@@ -88,7 +88,7 @@ export const CollectionQuery = graphql`
       }
     }
 
-    wordpressWpCollections(wordpress_id: { eq: $id }) {
+    wordsbyCollections(ID: { eq: $id }) {
       post_title
     }
   }

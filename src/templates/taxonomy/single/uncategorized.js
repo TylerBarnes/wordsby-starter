@@ -4,7 +4,7 @@ import { graphql, Link } from "gatsby";
 export default function home(props) {
   const {
     data: {
-      allWordpressWpCollections: { edges: posts }
+      allWordsbyCollections: { edges: posts }
     }
   } = props;
 
@@ -25,7 +25,7 @@ export default function home(props) {
 
 export const CollectionQuery = graphql`
   query UncategorizedTermSingle($slug: String!) {
-    allWordpressWpCollections(
+    allWordsbyCollections(
       filter: {
         term_slugs: { in: [$slug] }
         post_title: { ne: "schema_builder" }

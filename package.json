@@ -40,8 +40,8 @@
     "styled-components": "^4.1.2",
     "tyjs": "^0.0.2",
     "uuid": "^3.2.1",
-    "wordsby": "^0.5.3",
-    "wordsby-components": "0.0.12"
+    "wordsby": "^0.6.0",
+    "wordsby-components": "0.0.14"
   },
   "keywords": [
     "gatsby",

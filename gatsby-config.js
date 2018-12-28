@@ -24,7 +24,8 @@ const gatsbyConfig = {
     {
       resolve: "gatsby-plugin-wordsby",
       options: {
-        previewToken: process.env.PREVIEW_TOKEN
+        previewToken: process.env.preview_token,
+        siteUrl: `http://wordsby.test`
       }
     },
     "gatsby-plugin-react-helmet",

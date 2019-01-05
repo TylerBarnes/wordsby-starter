@@ -7,8 +7,7 @@ For more info, check out the [Wordsby readme](https://github.com/TylerBarnes/wor
 
 To use this starter:
 
-1. Install [gatsby-cli](https://www.gatsbyjs.org/docs/)
-2. Follow the wordsby cli install at [the readme](https://github.com/TylerBarnes/wordsby).
-3. Run `gatsby new wordsby-starter https://github.com/TylerBarnes/wordsby-starter`
+1. Follow the install at [the wordsby readme](https://github.com/TylerBarnes/wordsby).
+2. Run `gatsby new wordsby-starter https://github.com/TylerBarnes/wordsby-starter`
 
 ![Wordsby starter](wordsby-starter.png?raw=true "Wordsby starter")

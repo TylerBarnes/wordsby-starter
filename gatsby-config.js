@@ -90,20 +90,20 @@ const gatsbyConfig = {
         }
       }
     },
-    {
-      resolve: 'gatsby-plugin-netlify',
-      options: {
-        headers: {
-          '/*': [
-            // these headers are to allow preview from wordsby.code
-            'X-Frame-Options: allow-from http://wordsby.code',
-            `X-XSS-Protection: 1; mode=block`,
-            `X-Content-Type-Options: nosniff`,
-          ],
-        },
-        mergeSecurityHeaders: false,
-      },
-    },
+    // {
+    //   resolve: 'gatsby-plugin-netlify',
+    //   options: {
+    //     headers: {
+    //       '/*': [
+    //         // these headers are to allow preview from wordsby.code
+    //         'X-Frame-Options: allow-from http://wordsby.code',
+    //         `X-XSS-Protection: 1; mode=block`,
+    //         `X-Content-Type-Options: nosniff`,
+    //       ],
+    //     },
+    //     mergeSecurityHeaders: false,
+    //   },
+    // },
     "gatsby-plugin-netlify-cache"
   ]
 };

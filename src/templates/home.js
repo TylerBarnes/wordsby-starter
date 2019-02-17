@@ -1,6 +1,6 @@
 import React from "react";
 import { graphql } from "gatsby";
-// import Parser from "html-react-parser";
+import Parser from "html-react-parser";
 
 export default function home({
   data: {
@@ -11,8 +11,7 @@ export default function home({
     <>
       <h1>Home Template</h1>
       {!!post_title && <h2>{post_title}</h2>}
-      {!!post_content && <div>{post_content}</div>}
-      {/* {!!hero_image && <Img field={hero_image} />} */}
+      {!!post_content && <div>{Parser(post_content)}</div>}
     </>
   );
 }

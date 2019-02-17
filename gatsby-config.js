@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const gatsbyConfig = {
   siteMetadata: {
-    siteUrl: `http://wordsby.test`
+    siteUrl: `https://wordsby-starter.netlify.com`
   },
   plugins: [
     `gatsby-plugin-styled-components`,

@@ -15,8 +15,15 @@ const gatsbyConfig = {
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        name: "wordsby",
-        path: `${__dirname}/wordsby/`
+        name: "wordsby-uploads",
+        path: `${__dirname}/wordsby/uploads/`
+      }
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "wordsby-data",
+        path: `${__dirname}/wordsby/data/`
       }
     },
     {

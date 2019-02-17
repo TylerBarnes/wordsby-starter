@@ -1,6 +1,6 @@
 import React from "react";
 import { graphql } from "gatsby";
-import Parser from "html-react-parser";
+// import Parser from "html-react-parser";
 
 export default function home(props) {
   const {
@@ -11,7 +11,7 @@ export default function home(props) {
     <>
       <h2>Default template</h2>
       {!!post_title && <h1>{post_title}</h1>}
-      {!!post_content && Parser(post_content)}
+      {!!post_content && post_content}
     </>
   );
 }

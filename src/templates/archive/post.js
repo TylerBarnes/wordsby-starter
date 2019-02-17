@@ -1,7 +1,7 @@
 import React from "react";
 import { graphql, Link } from "gatsby";
 import { Img } from "wordsby-components";
-import Parser from "html-react-parser";
+// import Parser from "html-react-parser";
 import excerptHtml from "excerpt-html";
 
 export default function home(props) {
@@ -46,7 +46,7 @@ export default function home(props) {
               </Link>
 
               {!!post.post_content && (
-                <div>{Parser(excerptHtml(post.post_content))}</div>
+                <div>{excerptHtml(post.post_content)}</div>
               )}
 
               <Link to={post.pathname}>

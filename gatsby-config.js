@@ -1,8 +1,6 @@
 require("dotenv").config();
-const previewPrefix = require("wordsby/preview");
 
 const gatsbyConfig = {
-  pathPrefix: previewPrefix(), // if you need to add a prefix to this site, pass it as a string eg. previewPrefix("/some-prefix").
   siteMetadata: {
     siteUrl: `http://wordsby.test`
   },
@@ -24,8 +22,12 @@ const gatsbyConfig = {
     {
       resolve: "gatsby-plugin-wordsby",
       options: {
-        previewToken: process.env.preview_token,
-        siteUrl: `http://wordsby.test`
+        siteUrl: `http://wordsby.test`,
+        inlineImages: {
+          recursive: true,
+          maxWidth: 500
+        },
+        instantPublish: false
       }
     },
     "gatsby-plugin-react-helmet",
@@ -86,25 +88,12 @@ const gatsbyConfig = {
   ]
 };
 
-if (process.env.NODE_ENV === "production" && !process.env.WORDSBY_PREVIEW) {
+if (process.env.NODE_ENV === "production") {
   gatsbyConfig.plugins.push("gatsby-plugin-offline");
 }
 
 if (process.env.NODE_ENV === "production") {
   gatsbyConfig.plugins.push("gatsby-plugin-favicon");
 }
-
-// if (
-//   wordsbyConfig.keys.googleAnalyticsID &&
-//   process.env.NODE_ENV === "production" &&
-//   !process.env.WORDSBY_PREVIEW
-// ) {
-//   gatsbyConfig.plugins.push({
-//     resolve: "gatsby-plugin-google-analytics",
-//     options: {
-//       trackingId: wordsbyConfig.keys.googleAnalyticsID
-//     }
-//   });
-// }
 
 module.exports = gatsbyConfig;

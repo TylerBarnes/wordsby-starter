@@ -109,7 +109,8 @@ const gatsbyConfig = {
 };
 
 if (process.env.NODE_ENV === "production") {
-  gatsbyConfig.plugins.push("gatsby-plugin-offline");
+  // gatsbyConfig.plugins.push("gatsby-plugin-offline");
+  gatsbyConfig.plugins.push("gatsby-plugin-removeserviceworker");
   gatsbyConfig.plugins.push("gatsby-plugin-favicon");
 }
 

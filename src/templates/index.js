@@ -21,17 +21,6 @@ export const CollectionQuery = graphql`
     wordsbyCollections(ID: { eq: $id }) {
       post_title
       post_content
-      acf {
-          test {
-            url {
-              childImageSharp {
-                fluid {
-                  originalImg
-                }
-              }
-            }
-          }
-        }
     }
   }
 `;

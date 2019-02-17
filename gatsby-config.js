@@ -97,9 +97,6 @@ const gatsbyConfig = {
 
 if (process.env.NODE_ENV === "production") {
   gatsbyConfig.plugins.push("gatsby-plugin-offline");
-}
-
-if (process.env.NODE_ENV === "production") {
   gatsbyConfig.plugins.push("gatsby-plugin-favicon");
 }
 

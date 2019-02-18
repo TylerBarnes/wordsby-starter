@@ -94,8 +94,7 @@ const gatsbyConfig = {
       options: {
         headers: {
           "/*": [
-            // these headers are to allow preview from wordsby.code, update the url here to the url of your WP backend.
-            "X-Frame-Options: allow-from http://wordsby.code",
+            // these headers are default except x-frame-options is omitted to allow previewing the site via iframe
             `X-XSS-Protection: 1; mode=block`,
             `X-Content-Type-Options: nosniff`
           ]

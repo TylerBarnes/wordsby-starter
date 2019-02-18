@@ -5887,10 +5887,10 @@ gatsby-plugin-transition-link@^1.5.1:
     react-transition-group "^2.5.0"
     requestanimationframe-timer "^1.0.4"
 
-gatsby-plugin-wordsby@0.0.16:
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-wordsby/-/gatsby-plugin-wordsby-0.0.16.tgz#b84cdaaa3258c3fa6e7236ea04d1cb5101eabff8"
-  integrity sha512-/4wnidXGmDw0XGzPdgHXR+ULjiXBzd6b7mpNaBX0LgJQxPsO/q3HzM8puIwr1w1bPTe41euLTabXreHZkHfLKw==
+gatsby-plugin-wordsby@^0.0.17:
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-wordsby/-/gatsby-plugin-wordsby-0.0.17.tgz#49bae65fbe5449d8d3724451e93ffcf98f085797"
+  integrity sha512-wfH7VcRV7PAS2Sw9iJBz2MgpK8ESNReGOa6A2RyUcWAaUdpOtuEX9IutHgKrXuH2ZyiZ0J4T4qv6hwNG+VGxkA==
   dependencies:
     "@babel/runtime" "^7.3.1"
     babel-plugin-transform-regenerator "^6.26.0"

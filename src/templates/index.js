@@ -11,7 +11,9 @@ export default function home(props) {
     <>
       <h2>Default template</h2>
       {!!post_title && <h1>{post_title}</h1>}
-      {!!post_content && Parser(post_content)}
+      {!!post_content && (
+        <div dangerouslySetInnerHTML={{ __html: post_content }} />
+      )}
     </>
   );
 }

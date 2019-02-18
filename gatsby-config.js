@@ -29,12 +29,17 @@ const gatsbyConfig = {
     {
       resolve: "gatsby-plugin-wordsby",
       options: {
-        siteUrl: `http://wordsby.test`,
         inlineImages: {
           recursive: true,
           maxWidth: 500
         },
         instantPublish: false
+      }
+    },
+    {
+      resolve: "gatsby-plugin-transition-link",
+      options: {
+        layout: require.resolve(`./src/components/layouts/index.js`)
       }
     },
     "gatsby-plugin-react-helmet",
@@ -74,12 +79,6 @@ const gatsbyConfig = {
             }
           }
       }`
-      }
-    },
-    {
-      resolve: "gatsby-plugin-transition-link",
-      options: {
-        layout: require.resolve(`./src/components/layouts/index.js`)
       }
     },
     {
